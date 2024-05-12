@@ -62,13 +62,13 @@ router.post(
 );
 
 //   Log out
-// router.delete(
-//     '/',
-//     (_req, res) => {
-//       res.clearCookie('token');//delete cookie'token' , which is a wjt,  NOT XSRF-TOKEN
-//       return res.json({ message: 'success' });
-//     }
-//   );
+router.delete(
+    '/',
+    (_req, res) => {
+      res.clearCookie('token');//delete cookie'token' , which is a wjt,  NOT XSRF-TOKEN
+      return res.json({ message: 'success' });
+    }
+  );
 
 
 // Restore session user
