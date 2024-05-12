@@ -1,4 +1,4 @@
-# Hui-Wen-backend-project
+# Hui-Wen-project-one
 
 ## Database Schema Design
 
