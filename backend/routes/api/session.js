@@ -49,6 +49,8 @@ router.post(
   
       const safeUser = {//add firstName&lastName after adding new columns
         id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
         username: user.username,
       };
@@ -80,8 +82,8 @@ router.get(
       if (user) {
         const safeUser = {
           id: user.id,
-        //   firstName: user.firstName,
-        //   lastName: user.lastName,
+          firstName: user.firstName,
+          lastName: user.lastName,
           email: user.email,
           username: user.username,
         };
