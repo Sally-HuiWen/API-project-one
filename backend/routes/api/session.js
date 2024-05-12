@@ -72,25 +72,25 @@ router.delete(
 
 
 // Restore session user
-// //check if req.user exist or not; import restoreUser middleware, req.user is inside;
-// router.get(
-//     '/',
-//     (req, res) => {
-//       const { user } = req;
-//       if (user) {
-//         const safeUser = {
-//           id: user.id,
-//           firstName: user.firstName,
-//           lastName: user.lastName,
-//           email: user.email,
-//           username: user.username,
-//         };
-//         return res.json({
-//           user: safeUser
-//         });
-//       } else return res.json({ user: null });//f there is not a session, it will return a JSON with an empty object. 
-//     }
-//   );
+//check if req.user exist or not; import restoreUser middleware const {restoreUser } = require('../../utils/auth');, req.user is inside;
+router.get(
+    '/',
+    (req, res) => {
+      const { user } = req;
+      if (user) {
+        const safeUser = {
+          id: user.id,
+        //   firstName: user.firstName,
+        //   lastName: user.lastName,
+          email: user.email,
+          username: user.username,
+        };
+        return res.json({
+          user: safeUser
+        });
+      } else return res.json({ user: null });//f there is not a session, it will return a JSON with an empty object. 
+    }
+  );
 
 
 
