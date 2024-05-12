@@ -35,7 +35,7 @@ const router = express.Router();
 //   handleValidationErrors
 // ];
 
-// Sign up
+// Sign up no firstName & lastName
 router.post(
     '/',
     // validateSignup,
