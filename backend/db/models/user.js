@@ -40,9 +40,15 @@ module.exports = (sequelize, DataTypes) => {
           len: [60, 60]
         }
       }
-    }, {
+    }, 
+    {
       sequelize,
-      modelName: 'User'
+      modelName: 'User',
+      defaultScope: {
+        attributes: {
+          exclude: ["hashedPassword", "email", "createdAt", "updatedAt"]//This scope will help protect sensitive user information that should not be exposed to other users.
+        }
+      }
     }
   );
   return User;
