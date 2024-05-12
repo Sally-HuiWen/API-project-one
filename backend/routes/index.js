@@ -1,7 +1,7 @@
 // backend/routes/index.js
 const express = require('express');
 const router = express.Router();
-// const apiRouter = require('./api');
+const apiRouter = require('./api');
 
 //my note: This route is designed to manage Cross-Site Request Forgery (CSRF) protection by generating and distributing a CSRF token both as a cookie and within a JSON response. 
 //the client must include this CSRF token as request header in subsequent requests. got the value from cookie in dev tool or JSON response body;
@@ -17,6 +17,6 @@ router.get("/api/csrf/restore", (req, res) => {
   });
 
 // All the URLs of the routes in the `api` router will be prefixed with `/api`.
-// router.use('/api', apiRouter);
+router.use('/api', apiRouter);
 
 module.exports = router;
