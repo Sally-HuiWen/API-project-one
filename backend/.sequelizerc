@@ -1,0 +1,13 @@
+// backend/.sequelizerc
+// Initialize Sequelize to the db folder by running the following command in your backend directory:npx sequelize init
+// path.resolve('config', 'database.js') is used to resolve the absolute path config/database.js relative to the current working directory(backend)
+//this file create config/database.js, db/models folder, db/seeders folder, and db/migrations folder
+
+const path = require('path');
+
+module.exports = {
+  config: path.resolve('config', 'database.js'),
+  'models-path': path.resolve('db', 'models'),
+  'seeders-path': path.resolve('db', 'seeders'),
+  'migrations-path': path.resolve('db', 'migrations')
+};
