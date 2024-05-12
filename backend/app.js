@@ -63,14 +63,11 @@ app.use(routes); // Connect all the routes
 //Sequelize Error-Handler phase2/part2
 const { ValidationError } = require('sequelize');
 
-
-
-
 // const path = require('path');
 // app.use('/images', express.static(path.join(__dirname, '..', 'images')));
 
 
-// Phase 2/part1: Catch unhandled requests and forward to error handler.
+// Phase 2/part1: Catch unhandled requests, create an error 'Resource Not Found', and forward to error handler.
 //This is a regular middleware to create an error!
 //It will catch any requests that don't match any of the routes defined and create a server error with a status code of 404.
 app.use((_req, _res, next) => {
@@ -81,14 +78,14 @@ app.use((_req, _res, next) => {
   next(err);
 });
 
-// Phase 2/part2:  catching Sequelize errors and formatting them 
-//an error handler middleware
+// Phase 2/part2:  
+//an error handler middleware to catch Sequelize errors and formatting them before sending the error response
 app.use((err, _req, _res, next) => {
   // check if error is a Sequelize error:
   if (err instanceof ValidationError) {
     let errors = {};
     for (let error of err.errors) {//err.errors refers to an array of error objects that Sequelize includes when it throws a ValidationError
-      errors[error.path] = error.message;
+      errors[error.path] = error.message;//err.path refers to the attribute or field name of the model that is associated with the error.
     }
     err.title = 'Validation error';
     err.errors = errors;
