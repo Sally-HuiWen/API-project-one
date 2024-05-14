@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Spot, SpotImage, Review } = require('../../db/models')
+const { Spot, SpotImage, Review, User } = require('../../db/models')
 const { requireAuth } = require ('../../utils/auth');
 
 //Get all Spots
@@ -61,7 +61,8 @@ router.get('/current', requireAuth, async(req,res)=> {
         include: 
         [
             {model: Review, attributes: ['stars']},
-            {model: SpotImage, attributes: ['url','preview']},
+            {model: SpotImage, attributes: ['url', 'preview']},
+        
         ]
 
     })
@@ -104,6 +105,50 @@ router.get('/current', requireAuth, async(req,res)=> {
     if (currentUserSpots.length >=1) res.status(200).json({spots: currentUserSpots});
     else res.json({ message: 'You do not have any spots posted yet!'})
 
+
+});
+
+
+//Get details of a Spot from an id
+router.get('/:spotId', async(req,res)=> {
+    const spot = await Spot.findByPk(req.params.spotId, {
+        include: [
+            {model: Review},
+            {model: SpotImage, attributes: ['id', 'url', 'preview']},
+            {model: User, attributes: ['id', 'firstName', 'lastName']}
+        ]
+    });
+    if (!spot) {
+        return res.status(404).json({
+            "message": "Spot couldn't be found"
+          });
+    }
+    const {id, ownerId, address, city, state, lat, lng, name, description, price, createdAt, updatedAt, SpotImages } = spot;
+    const spotRatingArr = spot.Reviews.map(review => review.stars)
+    const num = spot.Reviews.length
+    const spotAvgRating = (spotRatingArr.reduce((acc,curr) => acc + curr))/num
+    
+    const payload = {
+        id,
+        ownerId,
+        address,
+        city,
+        state,
+        lat,
+        lng,
+        name,
+        description,
+        price,
+        createdAt,
+        updatedAt,
+        numReviews: num,
+        avgStarRating: spotAvgRating,
+        SpotImages,
+        Owner: spot.User,
+
+    }
+
+    res.status(200).json(payload);
 
 })
 
