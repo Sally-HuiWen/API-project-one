@@ -3,6 +3,7 @@ const router = require('express').Router();
 const sessionRouter = require('./session.js');
 const usersRouter = require('./user.js');
 const spotsRouter = require('./spot.js');
+const reviewsRouter = require("./review.js");
 const { restoreUser } = require("../../utils/auth.js");
 
 
@@ -17,6 +18,8 @@ router.use('/session', sessionRouter);
 router.use('/users', usersRouter);
 
 router.use('/spots', spotsRouter);
+
+router.use('/reviews', reviewsRouter);
 
 //Do not remove it yet. You will be using it much later when setting up your frontend.
 router.post('/test', (req, res) => {
