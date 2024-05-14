@@ -222,7 +222,6 @@ router.post('/:spotId/images', requireAuth, async(req,res,next)=> {
         err.title = "not match";
         err.status = 403;
         return next(err);
-
     }
     
     const {url, preview} = req.body;
@@ -237,6 +236,40 @@ router.post('/:spotId/images', requireAuth, async(req,res,next)=> {
     }
 
     res.status(200).json(payload);
+})
+
+//Edit a Spot
+router.put('/:spotId', requireAuth, validateSpot, async(req, res, next)=> {
+    const spot = await Spot.findByPk(req.params.spotId);
+    if (!spot) {
+        const err = new Error("Spot couldn't be found");
+        err.title = "Spot Not Found";
+        err.status = 404;
+        return next(err);
+    };
+    if (spot.ownerId !== req.user.id) {
+        const err = new Error("Forbidden");
+        err.title = "not match";
+        err.status = 403;
+        return next(err);
+
+    }
+
+    const {address, city, state, country, lat, lng, name, description, price} = req.body;
+    spot.address = address;
+    spot.city = city;
+    spot.country = country;
+    spot.lat = lat;
+    spot.lng = lng;
+    spot.name = name;
+    spot.description = description;
+    spot.price = price;
+    
+    //do NOT forget to save it!
+    await spot.save();
+    res.json(spot);
+
+    
 })
 
 module.exports = router;
