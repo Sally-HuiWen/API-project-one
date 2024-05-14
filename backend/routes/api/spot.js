@@ -4,6 +4,8 @@ const { Spot, SpotImage, Review, User } = require('../../db/models')
 const { requireAuth } = require ('../../utils/auth');
 const {check} = require('express-validator');
 const {handleValidationErrors} = require('../../utils/validation');
+
+
 //Get all Spots
 router.get('/', async(req,res)=> {
 
@@ -151,7 +153,7 @@ router.get('/:spotId', async(req,res)=> {
 
     res.status(200).json(payload);
 
-})
+});
 
 //Create a Spot
 const validateSpot= [
@@ -183,7 +185,7 @@ const validateSpot= [
     .isFloat({ min: 1 })
     .withMessage('Price per day must be a positive number'),
     handleValidationErrors
-]
+];
 
 router.post('/', requireAuth, validateSpot, async(req,res)=> {
     const {address, city, state, country, lat, lng, name, description, price} = req.body;
@@ -202,7 +204,7 @@ router.post('/', requireAuth, validateSpot, async(req,res)=> {
 
     res.status(201).json(newSpot);
 
-})
+});
 
 //Add an Image to a Spot based on the Spot's id
 router.post('/:spotId/images', requireAuth, async(req,res,next)=> {
@@ -213,7 +215,7 @@ router.post('/:spotId/images', requireAuth, async(req,res,next)=> {
         err.title = "Spot Not Found";
         err.status = 404;
         return next(err);
-    };
+    }
 
     //if the user does not own this spot, create a error, statusCode 403
 
@@ -236,7 +238,7 @@ router.post('/:spotId/images', requireAuth, async(req,res,next)=> {
     }
 
     res.status(200).json(payload);
-})
+});
 
 //Edit a Spot
 router.put('/:spotId', requireAuth, validateSpot, async(req, res, next)=> {
@@ -246,7 +248,8 @@ router.put('/:spotId', requireAuth, validateSpot, async(req, res, next)=> {
         err.title = "Spot Not Found";
         err.status = 404;
         return next(err);
-    };
+    }
+
     if (spot.ownerId !== req.user.id) {
         const err = new Error("Forbidden");
         err.title = "not match";
@@ -268,8 +271,30 @@ router.put('/:spotId', requireAuth, validateSpot, async(req, res, next)=> {
     //do NOT forget to save it!
     await spot.save();
     res.json(spot);
+});
 
-    
+
+//Delete a Spot
+router.delete('/:spotId', requireAuth, async(req,res, next)=> {
+    const spot = await Spot.findByPk(req.params.spotId);
+    if (!spot) {
+        const err = new Error("Spot couldn't be found");
+        err.title = "Spot Not Found";
+        err.status = 404;
+        return next(err);
+    }
+
+    if (spot.ownerId !== req.user.id) {
+        const err = new Error("Forbidden");
+        err.title = "not match";
+        err.status = 403;
+        return next(err);
+
+    }
+    await spot.destroy();
+    res.status(200).json({
+        "message": "Successfully deleted"
+      })
+
 })
-
 module.exports = router;
