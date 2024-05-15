@@ -35,10 +35,9 @@ router.post('/:reviewId/images', requireAuth, async(req, res, next)=> {
 
     //check if req.user.id match review.userId
     if (req.user.id !== review.userId) {
-        const err = new Error("The user did not leave this review!");
-        err.title = "user review not match";
-        err.status = 403;
-        return next(err);
+        return res.status(403).json({
+            "message": "Forbidden"
+          });
 
     }
     //Error response: Cannot add any more images because there is a maximum of 10 images per resource
@@ -80,8 +79,8 @@ router.put('/:reviewId', requireAuth, validateReview, async(req, res)=> {
 
     if (req.user.id !== updatedReview.userId) {
         return res.status(403).json({
-            "message": "You can not edit other person's review!"
-        });
+            "message": "Forbidden"
+          });
     }
 
     const {review, stars} = req.body;
@@ -93,6 +92,26 @@ router.put('/:reviewId', requireAuth, validateReview, async(req, res)=> {
     res.status(200).json(updatedReview);
 });
 
+//Delete a Review
+router.delete('/:reviewId', requireAuth, async(req, res)=> {
+    const review = await Review.findByPk(req.params.reviewId);
+    if (!review) {
+        return res.status(404).json({
+            "message": "Review couldn't be found"
+        });
+    }
+
+    if (req.user.id !== review.userId) {
+        return res.status(403).json({
+            "message": "Forbidden"
+          });
+    }
+
+    await review.destroy();
+    res.status(200).json({
+        "message": "Successfully deleted"
+      });
+});
 
 
 
