@@ -4,6 +4,7 @@ const { Spot, SpotImage, Review, User, ReviewImage } = require('../../db/models'
 const { requireAuth } = require ('../../utils/auth');
 const {check} = require('express-validator');
 const {handleValidationErrors} = require('../../utils/validation');
+const { ValidationError } = require('sequelize');
 
 
 //Get all Spots
@@ -316,6 +317,58 @@ router.get('/:spotId/reviews', async(req,res, next)=> {
     });
     res.status(200).json({Reviews: reviews});
 
+});
+
+//Create a Review for a Spot based on the Spot's id
+const validateReview = [
+    check('review')
+    .exists({ checkFalsy: true })
+    .withMessage("Review text is required"),
+    check('stars')
+    .isInt({ min: 1, max: 5 })
+    .withMessage("Stars must be an integer from 1 to 5"),
+    handleValidationErrors
+];
+
+router.post('/:spotId/reviews', requireAuth, validateReview, async(req,res,next)=> {
+    const spot = await Spot.findByPk(req.params.spotId);
+    // console.log(req.user.id);
+    if (!spot) {
+        const err = new Error("Spot couldn't be found");
+        err.title = "Spot Not Found";
+        err.status = 404;
+        return next(err);
+    }
+    if (spot.ownerId === req.user.id) {
+        const err = new Error('You could not leave a review on your own property!');
+        err.status = 403;
+        err.title = 'No review for your own spot'
+        return next(err);
+    }
+
+    const alreadyExistReviews = await Review.findAll({
+        where: {
+            spotId: parseInt(req.params.spotId),
+            userId: req.user.id
+        }
+    })
+
+    //do not forget that empty array is truthy value!
+    //you could also use alreadyExistReviews.length > 0;
+    if (alreadyExistReviews.length) {
+        const err = new Error( "User already has a review for this spot");
+        err.title = 'review already exist';
+        err.status = 500;
+        return next(err);
+    }
+    
+    const { review, stars } = req.body;
+    const newReview = await spot.createReview({
+        userId: req.user.id,
+        review, 
+        stars});
+
+    res.status(201).json(newReview);
 })
 
 
