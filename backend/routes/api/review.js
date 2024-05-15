@@ -24,7 +24,6 @@ router.get('/current', requireAuth, async(req, res)=> {
 });
 
 // Add an Image to a Review based on the Review's id; starting branch review-two
-
 router.post('/:reviewId/images', requireAuth, async(req, res, next)=> {
     const review = await Review.findByPk(req.params.reviewId);
     //Error response: Couldn't find a Review with the specified id
@@ -58,9 +57,41 @@ router.post('/:reviewId/images', requireAuth, async(req, res, next)=> {
         url: newImage.url
     }
     res.status(201).json(payload);
+});
 
+//Edit a Review
+const validateReview = [
+    check('review')
+    .exists({ checkFalsy: true })
+    .withMessage("Review text is required"),
+    check('stars')
+    .isInt({ min: 1, max: 5 })
+    .withMessage("Stars must be an integer from 1 to 5"),
+    handleValidationErrors
+];
 
-})
+router.put('/:reviewId', requireAuth, validateReview, async(req, res)=> {
+    const updatedReview = await Review.findByPk(req.params.reviewId);
+    if (!updatedReview) {
+        return res.status(404).json({
+            "message": "Review couldn't be found"
+        });
+    }
+
+    if (req.user.id !== updatedReview.userId) {
+        return res.status(403).json({
+            "message": "You can not edit other person's review!"
+        });
+    }
+
+    const {review, stars} = req.body;
+    updatedReview.review = review;
+    updatedReview.stars = stars;
+    //alway forget to save!!!
+    await updatedReview.save();
+
+    res.status(200).json(updatedReview);
+});
 
 
 
