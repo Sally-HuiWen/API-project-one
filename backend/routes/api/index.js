@@ -4,6 +4,7 @@ const sessionRouter = require('./session.js');
 const usersRouter = require('./user.js');
 const spotsRouter = require('./spot.js');
 const reviewsRouter = require("./review.js");
+const bookingsRouter = require('./booking.js');
 const { restoreUser } = require("../../utils/auth.js");
 
 
@@ -20,6 +21,8 @@ router.use('/users', usersRouter);
 router.use('/spots', spotsRouter);
 
 router.use('/reviews', reviewsRouter);
+
+router.use('/bookings', bookingsRouter);
 
 //Do not remove it yet. You will be using it much later when setting up your frontend.
 router.post('/test', (req, res) => {
