@@ -20,8 +20,9 @@ router.get('/current', requireAuth, async(req,res)=> {
     })
 
     allCurrBookings.forEach(booking => {
-        if (booking.Spot.SpotImages.preview === true) {
-            booking.Spot.dataValues.previewImage = booking.Spot.SpotImages.preview.url;
+        const pre = booking.Spot.SpotImages.find(image => image.preview === true);
+        if (pre) {
+            booking.Spot.dataValues.previewImage = pre.url;
         } else {
             booking.Spot.dataValues.previewImage = null;
         }
@@ -29,10 +30,10 @@ router.get('/current', requireAuth, async(req,res)=> {
         delete booking.Spot.dataValues.SpotImages;
     })
     
- 
     res.status(200).json({Bookings: allCurrBookings});
 })
 
+//Get all Bookings for a Spot based on the Spot's id
 
 
 
