@@ -5,6 +5,7 @@ const { requireAuth } = require ('../../utils/auth');
 const {check} = require('express-validator');
 const {handleValidationErrors} = require('../../utils/validation');
 const { ValidationError } = require('sequelize');
+const { Op } = require('sequelize');
 
 
 //Get all Spots
@@ -369,6 +370,32 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req,res,next)
         stars});
 
     res.status(201).json(newReview);
+});
+
+//Get all Bookings for a Spot based on the Spot's id
+router.get('/:spotId/bookings', requireAuth, async(req, res, next)=> {
+    const spot = await Spot.findByPk(req.params.spotId);
+    if (!spot) {
+        const err = new Error("Spot couldn't be found");
+        err.title = "Spot Not Found";
+        err.status = 404;
+        return next(err);
+    }
+    //the booking can be done only be user not owner no matter req.user is the user or owner;
+    if (req.user.id !== spot.ownerId) {
+        const allBookingsForCurUser = await spot.getBookings({
+            attributes: ['spotId', 'startDate', 'endDate']
+        })
+        return res.status(200).json({Bookings: allBookingsForCurUser})
+    }
+
+    //If you ARE the owner of the spot.just add owner info in res
+    const allBookingsForCurOwner = await spot.getBookings({
+        include: {model: User, attributes: ['id', 'firstName','lastName']}
+    })
+    res.status(200).json({Bookings: allBookingsForCurOwner})
+
+    
 })
 
 
