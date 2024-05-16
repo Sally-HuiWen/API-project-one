@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Spot, SpotImage, Review, User, ReviewImage } = require('../../db/models')
+const { Spot, SpotImage, Review, User, ReviewImage, Booking } = require('../../db/models')
 const { requireAuth } = require ('../../utils/auth');
 const {check} = require('express-validator');
 const {handleValidationErrors} = require('../../utils/validation');
@@ -341,9 +341,9 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req,res,next)
         return next(err);
     }
     if (spot.ownerId === req.user.id) {
-        const err = new Error('You could not leave a review on your own property!');
+        const err = new Error('Forbidden');
         err.status = 403;
-        err.title = 'No review for your own spot'
+        err.title = 'not leave a review on your own property'
         return next(err);
     }
 
@@ -394,11 +394,80 @@ router.get('/:spotId/bookings', requireAuth, async(req, res, next)=> {
         include: {model: User, attributes: ['id', 'firstName','lastName']}
     })
     res.status(200).json({Bookings: allBookingsForCurOwner})
+});
 
-    
-})
+//Create a Booking from a Spot based on the Spot's id
+const validateBookingDates = [
+    check('startDate')
+    .exists({ checkFalsy: true })
+    .withMessage('startDate is required!')
+    .custom((value)=> {
+        if (new Date(value) < new Date()) {
+            throw new Error("startDate cannot be in the past")
+        }
+        return true;
+    }),
+    check('endDate')
+    .exists({ checkFalsy: true })
+    .withMessage('endDate is required!')
+    .custom((value, { req }) => {
+        if (new Date(value) <= new Date(req.body.startDate)) {
+            throw new Error('endDate cannot be on or before startDate');
+        }
+        return true;
+    }),
+    handleValidationErrors
+];
+router.post('/:spotId/bookings', requireAuth,validateBookingDates, async(req, res, next)=> {
+    const spot = await Spot.findByPk(req.params.spotId);
+    if (!spot) {
+        const err = new Error("Spot couldn't be found");
+        err.title = "Spot Not Found";
+        err.status = 404;
+        return next(err);
+    }
+    //A user is only authorized to create a booking if they do NOT own the spot
+    if (req.user.id === spot.ownerId) {
+        const err = new Error('Forbidden');
+        err.status = 403;
+        err.title = 'not allow to book your own property'
+        return next(err);
+    }
+   
+    const {startDate, endDate} = req.body;
 
+    // Error response: Booking conflict
+    //check this booking's spot's all bookings on possible conflict situation
+    const existingBookingsForThisSpot = await Booking.findAll({
+        where: {
+            spotId: spot.id,
+            [Op.or]: [
+                //existing booking starts during the input period
+                {startDate: {[Op.between]: [startDate, endDate]}},
+                //existing booking ends during the input period
+                {endDate: {[Op.between]: [startDate, endDate]}},
+                //existing booking is before startDateInput and after endDateInput
+                {[Op.and]: [{startDate: {[Op.lte]: startDate}}, {endDate: {[Op.gte]: endDate}}]}
+            ]
+        }
+    })
+    if (existingBookingsForThisSpot.length > 0) {
+        return res.status(403).json({
+            message: "Sorry, this spot is already booked for the specified dates",
+            errors: {
+                startDate: "Start date conflicts with an existing booking",
+                endDate: "End date conflicts with an existing booking"
+            }
+        });
+    }
 
+    const newBooking = await spot.createBooking({
+        userId: parseInt(req.user.id),
+        startDate,
+        endDate,
+    })
 
+    return res.status(200).json(newBooking);
+});
 
 module.exports = router;
