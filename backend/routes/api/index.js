@@ -5,7 +5,8 @@ const usersRouter = require('./user.js');
 const spotsRouter = require('./spot.js');
 const reviewsRouter = require("./review.js");
 const bookingsRouter = require('./booking.js');
-const SpotImagesRouter = require("./spot-images.js")
+const spotImagesRouter = require("./spot-images.js");
+const reviewImagesRouter = require('./review-images.js')
 const { restoreUser } = require("../../utils/auth.js");
 
 
@@ -25,7 +26,10 @@ router.use('/reviews', reviewsRouter);
 
 router.use('/bookings', bookingsRouter);
 
-router.use('/spot-images', SpotImagesRouter);
+router.use('/spot-images', spotImagesRouter);
+
+router.use('/review-images', reviewImagesRouter);
+
 
 //Do not remove it yet. You will be using it much later when setting up your frontend.
 router.post('/test', (req, res) => {
