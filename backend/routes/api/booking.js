@@ -112,7 +112,42 @@ router.put('/:bookingId', requireAuth, validateBookingDates, async(req, res, nex
     updatedBooking.endDate = endDate;
     await updatedBooking.save();
     res.status(200).json(updatedBooking);
-})
+});
+
+//Delete a Booking
+router.delete('/:bookingId', requireAuth, async(req, res, next)=> {
+    const booking = await Booking.findByPk(req.params.bookingId);
+    //Error response: Couldn't find a Booking with the specified id
+    if (!booking) {
+        const err = new Error("Booking couldn't be found");
+        err.title = "Not Found";
+        err.status = 404;
+        return next(err);
+    }
+
+    //not your booking, you can not delete it
+    if (req.user.id !== booking.userId) {
+        const err = new Error("Forbidden");
+        err.title = "not match";
+        err.status = 403;
+        return next(err);
+    }
+
+    //Error response: Bookings that have been started can't be deleted
+    if (new Date(booking.startDate) < new Date()) {
+        const err = new Error("Bookings that have been started can't be deleted");
+        err.title = "can not delete already-started-booking";
+        err.status = 403;
+        return next(err);
+
+    }
+
+    await booking.destroy();
+    res.status(200).json({
+        message: "Bookings that have been started can't be deleted"
+      });
+
+});
 
 
 
