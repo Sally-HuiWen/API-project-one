@@ -277,7 +277,6 @@ router.post('/:spotId/images', requireAuth, async(req,res,next)=> {
     }
 
     //if the user does not own this spot, create a error, statusCode 403
-
     if (spot.ownerId !== req.user.id) {
         const err = new Error("Forbidden");
         err.title = "not match";
