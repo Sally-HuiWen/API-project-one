@@ -47,6 +47,114 @@ module.exports = {
         startDate: '2024-09-01',
         endDate: '2024-09-12',
       },
+      {
+        spotId: 4,
+        userId: 2,
+        startDate: '2024-10-01',
+        endDate: '2024-10-05',
+      },
+      {
+        spotId: 5,
+        userId: 2,
+        startDate: '2024-09-01',
+        endDate: '2024-09-10',
+      },
+      {
+        spotId: 6,
+        userId: 2,
+        startDate: '2024-09-15',
+        endDate: '2024-09-20',
+      },
+      {
+        spotId: 7,
+        userId: 3,
+        startDate: '2024-08-08',
+        endDate: '2024-08-10',
+      },
+      {
+        spotId: 8,
+        userId: 3,
+        startDate: '2024-09-01',
+        endDate: '2024-09-08',
+      },
+      {
+        spotId: 9,
+        userId: 3,
+        startDate: '2024-09-05',
+        endDate: '2024-09-12',
+      },
+      {
+        spotId: 10,
+        userId: 1,
+        startDate: '2024-09-01',
+        endDate: '2024-09-03',
+      },
+      {
+        spotId: 11,
+        userId: 1,
+        startDate: '2024-09-01',
+        endDate: '2024-09-10',
+      },
+      {
+        spotId: 12,
+        userId: 1,
+        startDate: '2024-09-01',
+        endDate: '2024-09-08',
+      },
+      {
+        spotId: 13,
+        userId: 3,
+        startDate: '2024-09-01',
+        endDate: '2024-09-10',
+      },
+      {
+        spotId: 14,
+        userId: 3,
+        startDate: '2024-09-01',
+        endDate: '2024-09-09',
+      },
+      {
+        spotId: 15,
+        userId: 3,
+        startDate: '2024-09-01',
+        endDate: '2024-09-07',
+      },
+      {
+        spotId: 16,
+        userId: 1,
+        startDate: '2024-09-01',
+        endDate: '2024-09-08',
+      },
+      {
+        spotId: 17,
+        userId: 1,
+        startDate: '2024-09-01',
+        endDate: '2024-09-12',
+      },
+      {
+        spotId: 18,
+        userId: 1,
+        startDate: '2024-09-01',
+        endDate: '2024-09-15',
+      }, 
+      {
+        spotId: 19,
+        userId: 2,
+        startDate: '2024-09-01',
+        endDate: '2024-09-12',
+      }, 
+      {
+        spotId: 20,
+        userId: 2,
+        startDate: '2024-09-01',
+        endDate: '2024-09-15',
+      }, 
+      {
+        spotId: 21,
+        userId: 2,
+        startDate: '2024-09-01',
+        endDate: '2024-09-10',
+      },
       
     ])
   },
@@ -59,8 +167,7 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
     options.tableName = 'Bookings';
-    return queryInterface.bulkDelete(options, {
-      id: {[Op.in]: [1, 2, 3]}
-    }, {})
+    return queryInterface.bulkDelete(options, 'Bookings');
+      // {id: { [Op.in]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]}}
   }
 };
