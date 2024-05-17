@@ -2,7 +2,13 @@
 const router = require('express').Router();
 const sessionRouter = require('./session.js');
 const usersRouter = require('./user.js');
+const spotsRouter = require('./spot.js');
+const reviewsRouter = require("./review.js");
+const bookingsRouter = require('./booking.js');
+const spotImagesRouter = require("./spot-images.js");
+const reviewImagesRouter = require('./review-images.js')
 const { restoreUser } = require("../../utils/auth.js");
+
 
 // Connect restoreUser middleware to the API router
   // If current user session is valid, set req.user to the user in the database
@@ -13,6 +19,17 @@ router.use(restoreUser);//check if the user is authorized user!
 router.use('/session', sessionRouter);
   
 router.use('/users', usersRouter);
+
+router.use('/spots', spotsRouter);
+
+router.use('/reviews', reviewsRouter);
+
+router.use('/bookings', bookingsRouter);
+
+router.use('/spot-images', spotImagesRouter);
+
+router.use('/review-images', reviewImagesRouter);
+
 
 //Do not remove it yet. You will be using it much later when setting up your frontend.
 router.post('/test', (req, res) => {
