@@ -9,14 +9,71 @@ const { Op } = require('sequelize');
 
 
 //Get all Spots
-router.get('/', async(req,res)=> {
+const validateQueryParameters = [
+    check('page')
+    .optional()
+    .isInt({min:1})
+    .withMessage("Page must be greater than or equal to 1"),
+    check('size')
+    .optional()
+    .isInt({min:1})
+    .withMessage("Size must be greater than or equal to 1"),
+    check('maxLat')
+    .optional()
+    .isFloat({min: -90, max: 90})
+    .withMessage("Maximum latitude is invalid"),
+    check('minLat')
+    .optional()
+    .isFloat({min: -90, max: 90})
+    .withMessage("Minimum latitude is invalid"),
+    check('maxLng')
+    .optional()
+    .isFloat({min: -180, max: 180})
+    .withMessage("Maximum longitude is invalid"),
+    check('minLng')
+    .optional()
+    .isFloat({min: -180, max: 180})
+    .withMessage("Minimum longitude is invalid"),
+    check('maxPrice')
+    .optional()
+    .isFloat({min: 0})
+    .withMessage("Maximum price must be greater than or equal to 0"),
+    check('minPrice')
+    .optional()
+    .isFloat({min: 0})
+    .withMessage("Minimum price must be greater than or equal to 0"),
+    handleValidationErrors
+];
+
+router.get('/', validateQueryParameters, async(req,res, next)=> {
+
+    //add query filters:page and size; use let not const!!!!
+    let {page, size, maxLat, minLat, minLng, maxLng, minPrice, maxPrice} = req.query;
+    page = parseInt(page);
+    size = parseInt(size);
+
+    //is NaN take care of 3 situations:1) undefined; 2)"";3)'abc' 
+    if (isNaN(page) || page < 1 || page > 10) page = 1;
+    if (isNaN(size) || size < 1 || size > 20) size = 20;
+    
+    let where = {};
+    if (maxLat) where.lat = {[Op.lte]: parseFloat(maxLat)};
+    if (minLat) where.lat = {...where.lat,[Op.gte]: parseFloat(minLat)};
+    if (maxLng) where.lng = {[Op.lte]: parseFloat(maxLng)};
+    if (minLng) where.lng = {...where.lat, [Op.gte]: parseFloat(minLng)};
+    if (maxPrice) where.price = {[Op.lte]: parseFloat(maxPrice)};
+    if (minPrice) where.price = {...where.price, [Op.gte]: parseFloat(minPrice)};
+
 
     const allSpots = await Spot.findAll({
         include: 
         [
             {model: Review, attributes: ['stars']},
             {model: SpotImage, attributes: ['url','preview']},
-        ]
+        ],
+        where, 
+        limit: size,
+        offset: size * (page - 1)
     });
 
     //add avgRating and previewImage to allSpots;delete two other stuff.
@@ -54,7 +111,7 @@ router.get('/', async(req,res)=> {
         
     }
 
-    return res.status(200).json({Spots: allSpots});
+    return res.status(200).json({Spots: allSpots, page, size});
 });
 
 
@@ -184,7 +241,7 @@ const validateSpot= [
     .exists({ checkFalsy: true })
     .withMessage('Description is required'),
     check('price')
-    .isFloat({ min: 1 })
+    .isFloat({ min: 0 })
     .withMessage('Price per day must be a positive number'),
     handleValidationErrors
 ];
