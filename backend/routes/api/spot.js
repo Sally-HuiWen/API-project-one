@@ -117,9 +117,8 @@ router.get('/', validateQueryParameters, async(req,res, next)=> {
 
 //Get all Spots owned by the Current User
 router.get('/current', requireAuth, async(req,res)=> {
-    const currentUserOwnerId = req.user.id;
     const currentUserSpots = await Spot.findAll({
-        where: { ownerId: currentUserOwnerId},
+        where: { ownerId: req.user.id},
         include: 
         [
             {model: Review, attributes: ['stars']},
@@ -164,7 +163,7 @@ router.get('/current', requireAuth, async(req,res)=> {
         
     }
 
-    if (currentUserSpots.length >=1) res.status(200).json({spots: currentUserSpots});
+    if (currentUserSpots.length > 0) res.status(200).json({spots: currentUserSpots});
     else res.json({ message: 'You do not have any spots posted yet!'})
 
 
@@ -182,13 +181,20 @@ router.get('/:spotId', async(req,res)=> {
     });
     if (!spot) {
         return res.status(404).json({
-            "message": "Spot couldn't be found"
+            message: "Spot couldn't be found"
           });
     }
+
     const {id, ownerId, address, city, state, lat, lng, name, description, price, createdAt, updatedAt, SpotImages } = spot;
     const spotRatingArr = spot.Reviews.map(review => review.stars)
     const num = spot.Reviews.length
     const spotAvgRating = (spotRatingArr.reduce((acc,curr) => acc + curr))/num
+    
+    if (SpotImages.length === 0) {
+        flexibleSpotImages = null;
+    } else {
+        flexibleSpotImages = SpotImages;
+    }
     
     const payload = {
         id,
@@ -205,7 +211,7 @@ router.get('/:spotId', async(req,res)=> {
         updatedAt,
         numReviews: num,
         avgStarRating: spotAvgRating,
-        SpotImages,
+        SpotImages: flexibleSpotImages,
         Owner: spot.User,
 
     }
