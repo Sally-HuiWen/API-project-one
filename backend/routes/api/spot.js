@@ -85,7 +85,7 @@ router.get('/', validateQueryParameters, async(req,res, next)=> {
             ratingArr.push(review.stars);
         }
 
-        const totalRating = ratingArr.reduce((acc,curr)=>acc+curr);
+        const totalRating = ratingArr.reduce((acc,curr)=> acc + curr, 0);
         const reviewNum = spot.Reviews.length;
         result = totalRating/reviewNum;
 
@@ -128,6 +128,10 @@ router.get('/current', requireAuth, async(req,res)=> {
 
     })
 
+    if (!currentUserSpots.length) {
+        return res.status(200).json({ message: 'You do not have any spots posted yet!'})
+    }
+
     //add avgRating and previewImage to allSpots;delete two other stuff.
     for (let spot of currentUserSpots) {
 
@@ -137,7 +141,7 @@ router.get('/current', requireAuth, async(req,res)=> {
             ratingArr.push(review.stars);
         }
 
-        const totalRating = ratingArr.reduce((acc,curr)=>acc+curr);
+        const totalRating = ratingArr.reduce((acc,curr)=> acc + curr, 0);
         const reviewNum = spot.Reviews.length;
         result = totalRating/reviewNum;
 
@@ -162,9 +166,8 @@ router.get('/current', requireAuth, async(req,res)=> {
         delete spot.dataValues.SpotImages; 
         
     }
-
-    if (currentUserSpots.length > 0) res.status(200).json({spots: currentUserSpots});
-    else res.json({ message: 'You do not have any spots posted yet!'})
+    res.status(200).json({spots: currentUserSpots});
+   
 
 
 });
@@ -188,7 +191,7 @@ router.get('/:spotId', async(req,res)=> {
     const {id, ownerId, address, city, state, lat, lng, name, description, price, createdAt, updatedAt, SpotImages } = spot;
     const spotRatingArr = spot.Reviews.map(review => review.stars)
     const num = spot.Reviews.length
-    const spotAvgRating = (spotRatingArr.reduce((acc,curr) => acc + curr))/num
+    const spotAvgRating = (spotRatingArr.reduce((acc,curr) => acc + curr, 0))/num
     
     if (SpotImages.length === 0) {
         flexibleSpotImages = null;
