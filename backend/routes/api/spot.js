@@ -141,7 +141,7 @@ router.get('/current', requireAuth, async(req,res)=> {
             ratingArr.push(review.stars);
         }
 
-        const totalRating = ratingArr.reduce((acc,curr)=> acc + curr, 0);
+        const totalRating = ratingArr.reduce((acc,curr)=> acc + curr, 0);//including an initial value 0 will prevents the error when ratingArr is empty array.
         const reviewNum = spot.Reviews.length;
         result = totalRating/reviewNum;
 
