@@ -12,11 +12,7 @@ const SpotsList = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchSpotsData = async () => {
-      await dispatch(getAllSpots());
-      setIsLoaded(true);
-    };
-    fetchSpotsData();
+    dispatch(getAllSpots()).then(() => setIsLoaded(true));
   }, [dispatch]);
 
   return (
@@ -25,13 +21,13 @@ const SpotsList = () => {
             <Link 
               className="link-all-spots" 
               key={spot.id} to={`/spots/${spot.id}`}
-              title={spot.name}
+              title={spot.name}//using the title attribute in the <Link> element will create a simple tooltip that displays the value of spot.name when you hover
             > 
              <div className='container'>
                 <img
                  id='spot-image'
-                 src={`/image${spot.id}.jpeg`}
-                 alt={`${spot.name} Static Image from Public Folder`}
+                 src={spot.previewImage}
+                 alt='preview image'
                />
                 <div id='city-state-rating'>
                     <p className="spot-city-state">{spot.city}, {spot.state}</p>

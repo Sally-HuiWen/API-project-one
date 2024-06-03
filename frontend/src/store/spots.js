@@ -19,22 +19,27 @@ export const getOneSpot = (spot) => ({
 //thunk creators
 export const getAllSpots = ()=> async(dispatch)=> {
     const res = await csrfFetch('/api/spots');
-    console.log('res after fetching allSpots', res )
+    // console.log('res after fetching allSpots', res )
     if (res.ok) {
         const allSpots = await res.json();
-        console.log('allSpots res body only', allSpots)
+        // console.log('allSpots res body only', allSpots)
         dispatch(getSpots(allSpots));
     } 
 }
 
 // export const getOneSpotDetail = (spotId)=> async(dispatch)=> {
-//     const res = await csrfFetch('/api/spots/:spotId');
+//     const res = await csrfFetch(`/api/spots/${spotId}`);
 //     console.log('res after fetching one spot', res )
 //     if (res.ok) {
 //         const spot = await res.json();
-//         console.log('allSpots res body only', allSpots)
-//         dispatch(getSpots(allSpots));
-//     } 
+//         console.log('fetching on spot res body only', spot)
+//         dispatch(getOneSpot(spot));
+//     } else {
+//         const errors = await res.json()
+//         console.log("fetching one spot detail errors", errors)
+//         return errors
+
+//     }
 // }
 
 //reducers
@@ -46,6 +51,10 @@ export default function spotReducer(state = {}, action) {
                 allSpotsState[spot.id] = spot;   
             })
             return allSpotsState
+        }
+        case GET_ONE_SPOT: {
+            return {...state,[action.spot.id]: action.spot};
+
         }
         default:
             return state    
