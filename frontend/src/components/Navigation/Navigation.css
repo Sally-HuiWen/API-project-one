@@ -5,3 +5,21 @@
 .hidden {
   display: none;
 }
+
+#airbnb-header {
+  display: flex;
+  justify-content: space-between;
+  
+}
+
+.left-header {
+  color: red;
+  font-size: 50px;
+  cursor: pointer;
+}
+
+.right-header {
+  border: 2px purple solid;
+  border-radius: 10px;
+  padding-right: 10px;
+}
