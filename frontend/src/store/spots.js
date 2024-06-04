@@ -27,20 +27,19 @@ export const getAllSpots = ()=> async(dispatch)=> {
     } 
 }
 
-// export const getOneSpotDetail = (spotId)=> async(dispatch)=> {
-//     const res = await csrfFetch(`/api/spots/${spotId}`);
-//     console.log('res after fetching one spot', res )
-//     if (res.ok) {
-//         const spot = await res.json();
-//         console.log('fetching on spot res body only', spot)
-//         dispatch(getOneSpot(spot));
-//     } else {
-//         const errors = await res.json()
-//         console.log("fetching one spot detail errors", errors)
-//         return errors
-
-//     }
-// }
+export const getOneSpotDetail = (spotId)=> async(dispatch)=> {
+    const res = await csrfFetch(`/api/spots/${spotId}`);
+    console.log('res after fetching one spot', res )
+    if (res.ok) {
+        const spot = await res.json();
+        console.log('fetching on spot res body only', spot)
+        dispatch(getOneSpot(spot));
+    } else {
+        const errors = await res.json()
+        console.log("fetching one spot detail errors", errors)
+        return errors;
+    }
+}
 
 //reducers
 export default function spotReducer(state = {}, action) {

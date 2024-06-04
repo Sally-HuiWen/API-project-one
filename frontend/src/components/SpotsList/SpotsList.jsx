@@ -1,4 +1,4 @@
-import { FaStar } from "react-icons/fa";
+import { IoStar } from "react-icons/io5";
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,7 +32,7 @@ const SpotsList = () => {
                 <div id='city-state-rating'>
                     <p className="spot-city-state">{spot.city}, {spot.state}</p>
                     <p className="spot-avgRating">
-                        <FaStar />
+                      <IoStar />
                     {spot.avgRating?spot.avgRating: "New"}
                     </p> 
                 </div>

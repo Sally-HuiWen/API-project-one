@@ -1,100 +1,108 @@
-// import { useParams } from "react-router-dom";
-// import { useDispatch, useSelector } from "react-redux";
-// import { useState ,useEffect} from "react";
-// import { getOneSpotDetail } from "../../store/spots";
-// import "./SpotDetail.css";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useState ,useEffect} from "react";
+import { getOneSpotDetail } from "../../store/spots";
+import "./SpotDetail.css";
+import { IoStar } from "react-icons/io5";
 
 
-// function SpotDetail() {
-//   const [isLoaded, setIsLoaded] = useState(false);
-//   const {spotId} = useParams();
-//   const dispatch = useDispatch();
-//   const spot = useSelector((state) => state.spot[spotId]);
+export default function SpotDetail() {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const {spotId} = useParams();
+  const dispatch = useDispatch();
+  const spot = useSelector((state) => state.spot[spotId]);
  
-//   useEffect(() => {
-//     dispatch(getOneSpotDetail(spotId)).then(() => setIsLoaded(true));
-// }, [dispatch, spotId]);
+  useEffect(() => {
+    dispatch(getOneSpotDetail(spotId)).then(() => setIsLoaded(true));
+}, [dispatch, spotId]);
 
-//   return (
-//     <div >
-//         <h1>{spot.name}</h1>
-//         <p>{spot.city}, {spot.state}, {spot.country}</p>
-//         <div className='images for this spot'>
-//             <div
-//                 className="preview-img-div"
-//                 style={{ backgroundImage: `url(${previewImage.url})` }}
-//                 alt={`${currentSpot.name} photo`}
-//               >
-//                 <div className="inside-img-div"></div>
-//               </div>
-//               <div className="photo-square">
-//                 <div
-//                   className="other-img-div"
-//                   style={{ backgroundImage: `url(${otherImages[0]?.url})` }}
-//                   alt={`${currentSpot.name} photo`}
-//                 ></div>
-//                 <div
-//                   className="other-img-div"
-//                   style={{ backgroundImage: `url(${otherImages[1]?.url})` }}
-//                   alt={`${currentSpot.name} photo`}
-//                 ></div>
-//                 <div
-//                   className="other-img-div"
-//                   style={{ backgroundImage: `url(${otherImages[2]?.url})` }}
-//                   alt={`${currentSpot.name} photo`}
-//                 ></div>
-//                 <div
-//                   className="other-img-div"
-//                   style={{ backgroundImage: `url(${otherImages[3]?.url})` }}
-//                   alt={`${currentSpot.name} photo`}
-//                 ></div>
-//               </div>
-//             </div>
-//             {/*  MIDDLE SECTION */}
-//             <div className="description-and-booking-section">
-//               <div className="description-div">
-//                 <h3 className="hosted-by">
-//                   Hosted by {currentSpot.Owner.firstName}{" "}
-//                   {currentSpot.Owner.lastName}
-//                 </h3>
-//                 <p>{currentSpot.description}</p>
-//               </div>
-//               {/* bookings section */}
-//               <div className="bookings-div">
-//                 <div className="top-of-bookings">
-//                   <div className="price-div">
-//                     <h2>${currentSpot.price} </h2> <span>/night</span>
-//                   </div>
-//                   <div className="ratingAndStar-bookings">
-//                     <FaStar />
-//                     <p className="avg-rating"> {currentSpot.avgRating}</p>
+  return (
+    <div className='big-container'>
+      {isLoaded && spot && (
+        <>
+          <h1>{spot.name}</h1>
+          <p>{spot.city}, {spot.state}, {spot.country}</p>
+  
+          <div className="image-grid">
+          {spot.SpotImages && spot.SpotImages.length > 0 && (
+            <>
+              {spot.SpotImages[0] && (
+                <img
+                  className="img1"
+                  src={spot.SpotImages[0].url}
+                  alt="img1"
+                />
+              )}
+              {spot.SpotImages[1] && (
+                <img
+                  className="img2"
+                  src={spot.SpotImages[1].url}
+                  alt="img2"
+                />
+              )}
+              {spot.SpotImages[2] && (
+                <img
+                  className="img3"
+                  src={spot.SpotImages[2].url}
+                  alt="img3"
+                />
+              )}
+              {spot.SpotImages[3] && (
+                <img
+                  className="img4"
+                  src={spot.SpotImages[3].url}
+                  alt="img4"
+                />
+              )}
+              {spot.SpotImages[4] && (
+                <img
+                  className="img5"
+                  src={spot.SpotImages[4].url}
+                  alt="img5"
+                />
+              )}
+            </>
+          )}
+          </div>
 
-//                     {currentSpot.numReviews > 0 && <p> · </p>}
-//                     {currentSpot.numReviews > 0 && (
-//                       <p className="num-reviews-middle">
-//                         {currentSpot.numReviews}{" "}
-//                         {currentSpot.numReviews > 1 ? "Reviews" : "Review"}
-//                       </p>
-//                     )}
-//                   </div>
-//                 </div>
-//                 <button
-//                   className="booking-button"
-//                   onClick={() => alert("Feature coming soon")}
-//                 >
-//                   Reserve
-//                 </button>
-//               </div>
-//             </div>
-//             {/* REVIEWS SECTION */}
-//             <div className="reviews-section-div">
-//               <ReviewsSection currentSpot={currentSpot} />
-//             </div>
-//           </main>
-//         ) : null}
-//       </div>
-//     </div>
-//   );
-// }
+          <div className='owner-and-booking-box'>
+            <div className='owner-and-description'>
+              <h2>Hosted by {spot.Owner.firstName} {spot.Owner.lastName}</h2>
+              <p>{spot.description}</p>
+            </div>
 
-// export default SpotDetails;
+            <div className='booking'>
+              <div className='price-rating-review'>
+                <h2>{spot.price} night</h2>
+                <p className="avgRating">
+                  <IoStar />
+                  {spot.avgStarRating?spot.avgStarRating: "New"}
+                </p>
+                <p>{spot.numReviews} reviews</p>
+              </div>
+              
+              <button
+               className='booking-button'
+               onClick={()=> alert("Feature coming soon...")}
+               >Reserve</button>
+            </div>
+          </div>
+
+          <div className='review-box'>
+            <div className="review-header">
+              <h2 className="avgRating">
+                <IoStar />
+                  {spot.avgStarRating?spot.avgStarRating: "New"}
+              </h2>
+              <h2 className='numReviews'>{spot.numReviews} reviews</h2>
+            </div>
+
+            <div className="review-list">
+            </div>
+          </div>
+
+        </>
+      )}
+    </div>
+  )}
+
