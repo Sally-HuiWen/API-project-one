@@ -1,0 +1,19 @@
+#list-format {
+    width:100px; 
+}
+
+#ul {
+    background-color: lightblue;
+    border: blue;
+    font-weight: 200;
+}
+
+#logout-button {
+    border-radius: 20px;
+    background-color:lightcoral;
+}
+
+i {
+    font-size: large;
+
+}

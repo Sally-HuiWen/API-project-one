@@ -1,0 +1,26 @@
+.country-div,
+.address-div,
+.city-div,
+.state-div,
+.lat-div,
+.lng-div {
+    display:flex;
+    flex-direction: column;
+}
+
+.city-and-state,
+.lat-and-lng {
+    display: flex;
+}
+
+#submit-button {
+    background-color: red;
+    border:2px solid black;
+    box-shadow: 5px 2px 2px black;
+    color: white;
+
+}
+
+#dollar-and-price-div {
+    display: flex;
+}

@@ -9,17 +9,33 @@
 #airbnb-header {
   display: flex;
   justify-content: space-between;
-  
+  align-items: center;
 }
 
 .left-header {
   color: red;
   font-size: 50px;
-  cursor: pointer;
+}
+
+.logo-and-name {
+  color: red;
+  text-decoration: none;
 }
 
 .right-header {
-  border: 2px purple solid;
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
+}
+
+.home-and-login{
   border-radius: 10px;
-  padding-right: 10px;
+  padding-right:50px;
+  font-size: large;
+}
+
+.create-new-spot-link {
+  border:none;
+  background-color: white;
+  font-size: large;
 }
