@@ -24,3 +24,7 @@
 #dollar-and-price-div {
     display: flex;
 }
+
+.errors {
+    color: red;
+}

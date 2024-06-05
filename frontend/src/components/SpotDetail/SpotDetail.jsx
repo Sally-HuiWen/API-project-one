@@ -36,28 +36,28 @@ export default function SpotDetail() {
               {spot.SpotImages[1] && (
                 <img
                   className="img2"
-                  src={spot.SpotImages[1].url}
+                  src={spot.SpotImages[1].url || '/noImage.jpeg'}
                   alt="img2"
                 />
               )}
               {spot.SpotImages[2] && (
                 <img
                   className="img3"
-                  src={spot.SpotImages[2].url}
+                  src={spot.SpotImages[2].url || '/noImage.jpeg'}
                   alt="img3"
                 />
               )}
               {spot.SpotImages[3] && (
                 <img
                   className="img4"
-                  src={spot.SpotImages[3].url}
+                  src={spot.SpotImages[3].url || '/noImage.jpeg'}
                   alt="img4"
                 />
               )}
               {spot.SpotImages[4] && (
                 <img
                   className="img5"
-                  src={spot.SpotImages[4].url}
+                  src={spot.SpotImages[4].url || '/noImage.jpeg'}
                   alt="img5"
                 />
               )}
@@ -94,6 +94,7 @@ export default function SpotDetail() {
                 <IoStar />
                   {spot.avgStarRating?spot.avgStarRating: "New"}
               </h2>
+              <h2>  . </h2>
               <h2 className='numReviews'>{spot.numReviews} reviews</h2>
             </div>
 

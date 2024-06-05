@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { createNewSpot } from '../../store/spots';
+import { addOneImageToSpot, createNewSpot } from '../../store/spots';
 import './SpotForm.css';
 
 const SpotForm = () => {
@@ -11,8 +11,8 @@ const SpotForm = () => {
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
-  const [lat, setLat] = useState();
-  const [lng, setLng] = useState();
+  const [lat, setLat] = useState(1);
+  const [lng, setLng] = useState(1);
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
   const [price, setPrice] = useState();
@@ -37,30 +37,50 @@ const SpotForm = () => {
     if (description.length < 30) errorArr.push('Description needs a minimum of 30 characters')
     if (!name) errorArr.push('Name is required')
     if (!price || isNaN(price)) errorArr.push('Price is required')
-    if (!previewImage.length) errorArr.push('Preview image is required.')
+    if (!previewImage) errorArr.push('Preview image is required')
     if (!validImgUrl(previewImage)) errorArr.push('Image URL must end in .png, .jpg, or .jpeg');
     if (imageOne && !validImgUrl(imageOne)) errorArr.push('Image URL must end in .png, .jpg, or .jpeg');
     if (imageTwo && !validImgUrl(imageTwo)) errorArr.push('Image URL must end in .png, .jpg, or .jpeg');
-    if (imageThree && validImgUrl(imageThree)) errorArr.push('Image URL must end in .png, .jpg, or .jpeg');
-    if (imageFour && validImgUrl(imageFour)) errorArr.push('Image URL must end in .png, .jpg, or .jpeg');
+    if (imageThree && !validImgUrl(imageThree)) errorArr.push('Image URL must end in .png, .jpg, or .jpeg');
+    if (imageFour && !validImgUrl(imageFour)) errorArr.push('Image URL must end in .png, .jpg, or .jpeg');
     setErrors(errorArr)
   },[country, address, city, state, lat, lng, description, name, price, previewImage, imageOne, imageTwo, imageThree, imageFour])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setHasSubmitted(true);
+
     if (errors.length > 0) return; // Prevent submission if frontend errors exist
 
-    const spot = { address, city, state, country, lat, lng, name, description, price }
-    console.log('spot before fetching from backend', spot)
+    const spot = { address, city, state, country, lat, lng, name, description, price, previewImage, imageOne, imageTwo, imageThree, imageFour }
+    // console.log('spot before fetching from backend', spot)
     const newSpot = await dispatch(createNewSpot(spot));
-    console.log('spot after fetching from backend', newSpot)
-    
+    // console.log('spot after fetching from backend', newSpot)
     if (newSpot.errors) {
-      console.log('what is backend errors', newSpot.errors)
-      setErrors(newSpot.errors);
+        // console.log('what are backend errors', newSpot.errors)
+        setErrors(newSpot.errors);
     } else {
-      navigate(`/spots/${newSpot.id}`);
+        const spotId = newSpot.id;
+
+        const previewImgObj = { url: previewImage, preview: true };
+        const newPreviewImgObj = await dispatch(addOneImageToSpot(spotId, previewImgObj));
+
+        const imageOneObj = { url: imageOne, preview: false };
+        const newImageOneObj = await dispatch(addOneImageToSpot(spotId, imageOneObj));
+
+        const imageTwoObj = { url: imageTwo, preview: false };
+        const newImageTwoObj = await dispatch(addOneImageToSpot(spotId, imageTwoObj));
+
+        const imageThreeObj = { url: imageThree, preview: false };
+        const newImageThreeObj = await dispatch(addOneImageToSpot(spotId, imageThreeObj));
+
+        const imageFourObj = { url: imageFour, preview: false };
+        const newImageFourObj = await dispatch(addOneImageToSpot(spotId, imageFourObj));
+
+        const spotImages = [newPreviewImgObj, newImageOneObj, newImageTwoObj, newImageThreeObj, newImageFourObj];
+        newSpot.SpotImages = spotImages;
+
+        navigate(`/spots/${spotId}`);
     }
   };
 
@@ -74,8 +94,8 @@ const SpotForm = () => {
 
       <div className='country-div'>
         <label htmlFor='country'>Country
-          <span>{errors.filter(error=> error.includes('Country'))}</span>
-          </label>
+        {errors.includes('Country is required') && <span className='errors'>Country is required</span>}
+        </label>
         <input
           id='country'
           type="text"
@@ -87,7 +107,7 @@ const SpotForm = () => {
 
       <div className='address-div'>
         <label htmlFor='address'>Street Address
-        {errors.filter(error=> error.includes('Address'))}
+        {errors.includes('Address is required') && <span className='errors'>Address is required</span>}
           </label>
         <input
           id='address'
@@ -100,9 +120,9 @@ const SpotForm = () => {
 
       <div className='city-and-state'>
         <div className='city-div'>
-          <label htmlFor='city'>
-          {errors.includes('City is required') && <span>City is required</span>}
-            City</label>
+          <label htmlFor='city'>City
+          {errors.includes('City is required') && <span className='errors'>City is required</span>}
+          </label>
           <input
             id='city'
             type="text"
@@ -113,9 +133,9 @@ const SpotForm = () => {
         </div>
         
         <div className='state-div'>
-          <label htmlFor='state'>
-          {errors.includes('State is required') && <span>State is required</span>}
-            State</label>
+          <label htmlFor='state'>State
+          {errors.includes('State is required') && <span className='errors'>State is required</span>}
+          </label>
           <input
             id='state'
             type="text"
@@ -128,12 +148,12 @@ const SpotForm = () => {
 
       <div className='lat-and-lng'>
         <div className='lat-div'>
-          <label htmlFor='lat'>
-          {errors.includes('Latitude is required') && <span>Latitude is required</span>}
-            Latitude</label>
+          <label htmlFor='lat'>Latitude
+          {errors.includes('Latitude is required') && <span className='errors'>Latitude is required</span>}
+          </label>
           <input
             id='lat'
-            type="text"
+            type="number"
             value={lat}
             onChange={(e) => setLat(e.target.value)}
             placeholder='Latitude'
@@ -141,12 +161,12 @@ const SpotForm = () => {
         </div>
         
         <div className='lng-div'>
-          <label htmlFor='lng'>
-          {errors.includes('Longitude is required') && (<span>Longitude is required</span>)}
-            Longitude</label>
+          <label htmlFor='lng'>Longitude
+          {errors.includes('Longitude is required') && (<span className='errors'>Longitude is required</span>)}
+          </label>
           <input
             id='lng'
-            type="text"
+            type="number"
             value={lng}
             onChange={(e) => setLng(e.target.value)}
             placeholder='Longitude'
@@ -158,15 +178,14 @@ const SpotForm = () => {
         <h2>Describe your place to guests</h2>
         <p>Mention the best features of your space, any special amenities like fast wifi or parking, and what you love about the neighborhood</p>
         <label>
-            <input 
-            type="textarea"
+            <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder='Description'
             />
         </label>
         {errors.includes('Description needs a minimum of 30 characters') && (
-            <p>Description needs a minimum of 30 characters</p>
+            <p className='errors'>Description needs a minimum of 30 characters</p>
             )}
       </div>
 
@@ -182,7 +201,7 @@ const SpotForm = () => {
             />
         </label>
         {errors.includes('Name is required') && (
-        <p>Name is required</p>
+        <p className='errors'>Name is required</p>
         )}
       </div>
 
@@ -193,14 +212,14 @@ const SpotForm = () => {
             <div>$</div>
             <label>
               <input 
-              type="text"
+              type="number"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               placeholder='Price per night (USD)'
             />
             </label>
         {errors.includes('Price is required') && (
-        <p>Price is required</p>
+        <p className='errors'>Price is required</p>
         )}
         </div> 
       </div>
@@ -218,11 +237,12 @@ const SpotForm = () => {
                 />
             </label>
             {errors.includes('Preview image is required') && (
-                <p>Preview image is required</p>
+                <p className='errors'>Preview image is required</p>
             )}
              {errors.includes('Image URL must end in .png, .jpg, or .jpeg') && (
-                <p>Image URL must end in .png, .jpg, or .jpeg</p>
+                <p className='errors'>Image URL must end in .png, .jpg, or .jpeg</p>
             )}
+            
         </div>
         <div className='image'>
             <label>
@@ -234,7 +254,7 @@ const SpotForm = () => {
                 />
             </label>
             {errors.includes('Image URL must end in .png, .jpg, or .jpeg') && (
-                <p>Image URL must end in .png, .jpg, or .jpeg</p>
+                <p className='errors'>Image URL must end in .png, .jpg, or .jpeg</p>
             )}
             
         </div>
@@ -248,7 +268,7 @@ const SpotForm = () => {
                 />
             </label>
             {errors.includes('Image URL must end in .png, .jpg, or .jpeg') && (
-                <p>Image URL must end in .png, .jpg, or .jpeg</p>
+                <p className='errors'>Image URL must end in .png, .jpg, or .jpeg</p>
             )}
         </div>
         <div className='image'>
@@ -261,7 +281,7 @@ const SpotForm = () => {
                 />
             </label>
             {errors.includes('Image URL must end in .png, .jpg, or .jpeg') && (
-                <p>Image URL must end in .png, .jpg, or .jpeg</p>
+                <p className='errors'>Image URL must end in .png, .jpg, or .jpeg</p>
             )}
         </div>
         <div className='image'>
@@ -274,12 +294,12 @@ const SpotForm = () => {
                 />
             </label>
             {errors.includes('Image URL must end in .png, .jpg, or .jpeg') && (
-                <p>Image URL must end in .png, .jpg, or .jpeg</p>
+                <p className='errors'>Image URL must end in .png, .jpg, or .jpeg</p>
             )}
         
         </div>
       </div>
-      
+
       <button id='submit-button' type="submit">Create Spot</button>
     </form>
   );

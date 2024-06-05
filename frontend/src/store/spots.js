@@ -4,7 +4,7 @@ import { csrfFetch } from './csrf.js';
 const GET_SPOTS = 'spots/getSpots';
 const GET_ONE_SPOT = 'spots/getOneSpot';
 const CREATE_NEW_SPOT = 'spots/new';
-
+const ADD_IMAGE='spots/addImage'
 //action creators
 export const getSpots = (spots) => ({
     type: GET_SPOTS,
@@ -19,6 +19,11 @@ export const getOneSpot = (spot) => ({
 export const createSpot = (spot) => ({
     type: CREATE_NEW_SPOT,
     spot
+})
+
+export const addImage = (image) => ({
+    type: ADD_IMAGE,
+    image
 })
 
 //thunk creators
@@ -47,21 +52,41 @@ export const getOneSpotDetail = (spotId)=> async(dispatch)=> {
 }
 
 export const createNewSpot = (spot) => async (dispatch) => {
-    const res = await csrfFetch("/api/posts",{
+    const res = await csrfFetch("/api/spots",{
         method: 'POST',
         headers: {
-            'Content-type': 'application/json'
+            "Content-Type": "application/json"
         },
         body: JSON.stringify(spot)
     })
     if (res.ok) {
         const newSpot = await res.json()
-        console.log("create newSpot res body", newSpot)
+        // console.log("create newSpot res body", newSpot)
         dispatch(createSpot(newSpot))
         return newSpot
     } else {
         const error = await res.json()
-        console.log("create newSpot ERROR", error)
+        // console.log("create newSpot ERROR", error)
+        return error
+    }
+}
+
+export const addOneImageToSpot = (spotId, imageObj) => async (dispatch) => {
+    const res = await csrfFetch(`/api/spots/${spotId}/images`, {
+        method: "POST",
+        headers: { 
+            "Content-Type": "application/json" 
+        },
+        body: JSON.stringify(imageObj)
+    })
+    if (res.ok) {
+        const newImage = await res.json()//newImage is an object
+        console.log("create newImage res body", newImage)
+        dispatch(addImage(newImage))
+        return newImage
+    } else {
+        const error = await res.json()
+        console.log("create newImage ERROR", error)
         return error
     }
 }
@@ -81,6 +106,9 @@ export default function spotReducer(state = {}, action) {
         }
         case CREATE_NEW_SPOT: {
             return {...state,[action.spot.id]: action.spot};
+        }
+        case ADD_IMAGE: {
+            return {...state, ...action.image};
         }
         default:
             return state    
