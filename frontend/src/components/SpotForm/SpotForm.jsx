@@ -49,6 +49,7 @@ const SpotForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setHasSubmitted(true);
+    const errorArr = [];
 
     if (errors.length > 0) return; // Prevent submission if frontend errors exist
 
@@ -94,7 +95,7 @@ const SpotForm = () => {
 
       <div className='country-div'>
         <label htmlFor='country'>Country
-        {errors.includes('Country is required') && <span className='errors'>Country is required</span>}
+        {hasSubmitted && errors.includes('Country is required') && <span className='errors'>Country is required</span>}
         </label>
         <input
           id='country'
@@ -107,7 +108,7 @@ const SpotForm = () => {
 
       <div className='address-div'>
         <label htmlFor='address'>Street Address
-        {errors.includes('Address is required') && <span className='errors'>Address is required</span>}
+        {hasSubmitted && errors.includes('Address is required') && <span className='errors'>Address is required</span>}
           </label>
         <input
           id='address'
@@ -121,7 +122,7 @@ const SpotForm = () => {
       <div className='city-and-state'>
         <div className='city-div'>
           <label htmlFor='city'>City
-          {errors.includes('City is required') && <span className='errors'>City is required</span>}
+          {hasSubmitted && errors.includes('City is required') && <span className='errors'>City is required</span>}
           </label>
           <input
             id='city'
@@ -134,7 +135,7 @@ const SpotForm = () => {
         
         <div className='state-div'>
           <label htmlFor='state'>State
-          {errors.includes('State is required') && <span className='errors'>State is required</span>}
+          {hasSubmitted && errors.includes('State is required') && <span className='errors'>State is required</span>}
           </label>
           <input
             id='state'
@@ -149,7 +150,7 @@ const SpotForm = () => {
       <div className='lat-and-lng'>
         <div className='lat-div'>
           <label htmlFor='lat'>Latitude
-          {errors.includes('Latitude is required') && <span className='errors'>Latitude is required</span>}
+          {hasSubmitted && errors.includes('Latitude is required') && <span className='errors'>Latitude is required</span>}
           </label>
           <input
             id='lat'
@@ -162,7 +163,7 @@ const SpotForm = () => {
         
         <div className='lng-div'>
           <label htmlFor='lng'>Longitude
-          {errors.includes('Longitude is required') && (<span className='errors'>Longitude is required</span>)}
+          {hasSubmitted && errors.includes('Longitude is required') && (<span className='errors'>Longitude is required</span>)}
           </label>
           <input
             id='lng'
@@ -184,7 +185,7 @@ const SpotForm = () => {
             placeholder='Description'
             />
         </label>
-        {errors.includes('Description needs a minimum of 30 characters') && (
+        {hasSubmitted && errors.includes('Description needs a minimum of 30 characters') && (
             <p className='errors'>Description needs a minimum of 30 characters</p>
             )}
       </div>
@@ -200,7 +201,7 @@ const SpotForm = () => {
             placeholder='Name of your spot'
             />
         </label>
-        {errors.includes('Name is required') && (
+        {hasSubmitted && errors.includes('Name is required') && (
         <p className='errors'>Name is required</p>
         )}
       </div>
@@ -218,7 +219,7 @@ const SpotForm = () => {
               placeholder='Price per night (USD)'
             />
             </label>
-        {errors.includes('Price is required') && (
+        {hasSubmitted && errors.includes('Price is required') && (
         <p className='errors'>Price is required</p>
         )}
         </div> 
@@ -236,10 +237,10 @@ const SpotForm = () => {
                 placeholder='Preview Image URL'
                 />
             </label>
-            {errors.includes('Preview image is required') && (
+            {hasSubmitted && errors.includes('Preview image is required') && (
                 <p className='errors'>Preview image is required</p>
             )}
-             {errors.includes('Image URL must end in .png, .jpg, or .jpeg') && (
+             {hasSubmitted && errors.includes('Image URL must end in .png, .jpg, or .jpeg') && (
                 <p className='errors'>Image URL must end in .png, .jpg, or .jpeg</p>
             )}
             
@@ -253,7 +254,7 @@ const SpotForm = () => {
                 placeholder='Image URL'
                 />
             </label>
-            {errors.includes('Image URL must end in .png, .jpg, or .jpeg') && (
+            {hasSubmitted && errors.includes('Image URL must end in .png, .jpg, or .jpeg') && (
                 <p className='errors'>Image URL must end in .png, .jpg, or .jpeg</p>
             )}
             
@@ -267,7 +268,7 @@ const SpotForm = () => {
                 placeholder='Image URL'
                 />
             </label>
-            {errors.includes('Image URL must end in .png, .jpg, or .jpeg') && (
+            {hasSubmitted && errors.includes('Image URL must end in .png, .jpg, or .jpeg') && (
                 <p className='errors'>Image URL must end in .png, .jpg, or .jpeg</p>
             )}
         </div>
@@ -280,7 +281,7 @@ const SpotForm = () => {
                 placeholder='Image URL'
                 />
             </label>
-            {errors.includes('Image URL must end in .png, .jpg, or .jpeg') && (
+            {hasSubmitted && errors.includes('Image URL must end in .png, .jpg, or .jpeg') && (
                 <p className='errors'>Image URL must end in .png, .jpg, or .jpeg</p>
             )}
         </div>
@@ -293,7 +294,7 @@ const SpotForm = () => {
                 placeholder='Image URL'
                 />
             </label>
-            {errors.includes('Image URL must end in .png, .jpg, or .jpeg') && (
+            {hasSubmitted && errors.includes('Image URL must end in .png, .jpg, or .jpeg') && (
                 <p className='errors'>Image URL must end in .png, .jpg, or .jpeg</p>
             )}
         

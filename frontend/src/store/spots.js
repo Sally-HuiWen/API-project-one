@@ -40,9 +40,9 @@ export const deleteSpot = (spotId) => ({
     spotId
 })
 
-export const updateSpot = (spotId) => ({
+export const updateSpot = (spot) => ({
     type: UPDATE_SPOT,
-    spotId
+    spot
 })
 
 
@@ -135,6 +135,26 @@ export const deleteOneSpot = (spotId) => async (dispatch) => {
     }
   };
 
+export const updateOneSpot = (spot) => async (dispatch) => {
+    const res = await csrfFetch(`/api/spots/${spot.id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(spot)
+    });
+    if (res.ok) {
+        const updatedSpot = await res.json();
+         console.log("updatedSpot res body", updatedSpot)
+        dispatch(updateSpot(updatedSpot))
+        return updatedSpot 
+    } else {
+        const error = await res.json()
+         console.log("updatedSpot error", error)
+        return error
+    }
+}
+
 //reducers
 export default function spotReducer(state = {}, action) {
     switch (action.type) {
@@ -177,6 +197,11 @@ export default function spotReducer(state = {}, action) {
             const deleteSpotState = { ...state };
             delete deleteSpotState[action.spotId];
             return deleteSpotState;
+
+        }
+
+        case UPDATE_SPOT: {
+            return {...state,[action.spot.id]: action.spot};
 
         }
         default:
