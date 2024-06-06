@@ -6,6 +6,7 @@ import { Outlet, createBrowserRouter, RouterProvider } from 'react-router-dom';
 import SpotsList from './components/SpotsList/';
 import SpotDetail from './components/SpotDetail/SpotDetail';
 import SpotForm from './components/SpotForm/SpotForm';
+import ManageSpots from './components/ManageSpots/ManageSpots';
 import Navigation from './components/Navigation/Navigation-bonus';
 import * as sessionActions from './store/session';
 import { Modal } from './context/Modal';
@@ -46,6 +47,18 @@ const router = createBrowserRouter([
         path: '/spots/new',
         element: <SpotForm />
       },
+      {
+        path: "/spots/current",
+        element: <ManageSpots />,
+      },
+      // {
+      //   path: "/spots/:spotId/update",
+      //   element: <SpotForm />,
+      // },
+      // {
+      //   path: "/spots/:spotId/delete",
+      //   element: <DeleteSpot />,
+      // },
 
       // {
       //   path: 'login',

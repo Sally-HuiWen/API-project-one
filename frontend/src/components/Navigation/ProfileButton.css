@@ -2,10 +2,15 @@
     width:100px; 
 }
 
-#ul {
-    background-color: lightblue;
-    border: blue;
+#ul { 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    list-style-type: none;
     font-weight: 200;
+    border:2px solid black;
 }
 
 #logout-button {
@@ -16,4 +21,9 @@
 i {
     font-size: large;
 
+}
+
+#manage-spot {
+    text-decoration: none;
+    color: black;
 }

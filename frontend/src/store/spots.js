@@ -4,7 +4,10 @@ import { csrfFetch } from './csrf.js';
 const GET_SPOTS = 'spots/getSpots';
 const GET_ONE_SPOT = 'spots/getOneSpot';
 const CREATE_NEW_SPOT = 'spots/new';
-const ADD_IMAGE='spots/addImage'
+const ADD_IMAGE='spots/addImage';
+const CURRENT_SPOTS='spots/currentOwnerSpots'
+const UPDATE_SPOT = 'spots/updateSpot';
+const DELETE_SPOT = 'spots/deleteSpot'
 //action creators
 export const getSpots = (spots) => ({
     type: GET_SPOTS,
@@ -21,9 +24,20 @@ export const createSpot = (spot) => ({
     spot
 })
 
-export const addImage = (image) => ({
+export const addImage = (spotId, imageObj) => ({
     type: ADD_IMAGE,
-    image
+    spotId,
+    imageObj
+})
+
+export const currentOwnerSpots = (spots) => ({
+    type: CURRENT_SPOTS,
+    spots
+})
+
+export const deleteSpot = (spotId) => ({
+    type: DELETE_SPOT,
+    spotId
 })
 
 //thunk creators
@@ -80,16 +94,40 @@ export const addOneImageToSpot = (spotId, imageObj) => async (dispatch) => {
         body: JSON.stringify(imageObj)
     })
     if (res.ok) {
-        const newImage = await res.json()//newImage is an object
-        console.log("create newImage res body", newImage)
-        dispatch(addImage(newImage))
+        const newImage = await res.json()//newImage is an object with id number
+        // console.log("create newImage res body", newImage)
+        dispatch(addImage(spotId, newImage))
         return newImage
     } else {
         const error = await res.json()
-        console.log("create newImage ERROR", error)
+        // console.log("create newImage ERROR", error)
         return error
     }
 }
+
+export const currentUserOwnedSpots = () => async(dispatch)=> {
+    const res = await csrfFetch('/api/spots/current');
+    if (res.ok) {
+        const spots = await res.json()
+        dispatch(currentOwnerSpots(spots))
+    } else {
+        const error = await res.json()
+        return error
+    }
+
+}
+
+export const deleteOneSpot = (spotId) => async (dispatch) => {
+    const res = await csrfFetch(`/api/spots/${spotId}`, {
+      method: 'DELETE'
+    });
+    if (res.ok) {
+      dispatch(deleteSpot(spotId));
+    } else {
+      const error = await res.json();
+      return error;
+    }
+  };
 
 //reducers
 export default function spotReducer(state = {}, action) {
@@ -99,7 +137,7 @@ export default function spotReducer(state = {}, action) {
             action.spots.Spots.forEach(spot=> {
                 allSpotsState[spot.id] = spot;   
             })
-            return allSpotsState
+            return { ...state, ...allSpotsState };
         }
         case GET_ONE_SPOT: {
             return {...state,[action.spot.id]: action.spot};
@@ -108,7 +146,30 @@ export default function spotReducer(state = {}, action) {
             return {...state,[action.spot.id]: action.spot};
         }
         case ADD_IMAGE: {
-            return {...state, ...action.image};
+            const { spotId, image } = action;
+            const spot = state[spotId];
+            if (!spot) return state; 
+            return {
+                ...state,
+                [spotId]: {
+                  ...spot,
+                  images: [...(spot.images || []), image] // add new image to the spotImage arr
+                }
+         
+            }
+        }
+        case CURRENT_SPOTS: {
+            const currentSpotsState = {};
+            action.spots.Spots.forEach(spot => {
+                currentSpotsState[spot.id] = spot;
+            });
+            return { ...state, ...currentSpotsState };
+        }
+        case DELETE_SPOT: {
+            const deleteSpotState = { ...state };
+            delete deleteSpotState[action.spotId];
+            return deleteSpotState;
+
         }
         default:
             return state    
