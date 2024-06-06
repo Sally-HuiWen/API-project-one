@@ -1,0 +1,27 @@
+.each-spot {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 20px;
+    column-gap: 20px;
+    color:blueviolet;
+}
+
+.each-spot > div {
+    flex-basis: 23%; 
+    
+}
+
+.link-current-spots {
+    text-decoration: none;
+
+}
+
+#box {
+    border: 2px solid blueviolet;
+    margin-bottom: 30px;
+}
+
+#spot-image {
+    width:100%;
+    height: 350px;
+}

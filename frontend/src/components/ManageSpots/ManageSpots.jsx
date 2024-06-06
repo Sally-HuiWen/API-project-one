@@ -1,30 +1,24 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { currentUserOwnedSpots } from "../../store/spots";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { IoStar } from "react-icons/io5"; 
-import { deleteOneSpot } from "../../store/spots";
-
+import OpenModalButton from "../OpenModalButton";
+import DeleteSpotModal from "./DeleteSpotModal";
+import './ManageSpots.css';
 const ManageSpots = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const spots = Object.values(useSelector((state) => (state.spot ? state.spot : {})));
+  const userId = useSelector(state => state.session.user?.id);
 
   useEffect(() => {
+    if (userId)
     dispatch(currentUserOwnedSpots());
-  }, [dispatch]);
+  }, [dispatch, userId]);
 
   if (!spots.length) {
     return <div>Loading...</div>; 
   }
-
-  const updateSpot = (spotId) => {
-    navigate(`/spots/${spotId}/update`);
-  };
-
-  const handleDeleteSpot = (spotId) => {
-    dispatch(deleteOneSpot(spotId));
-  };
 
   return (
     <div id='current-owner-spots-container'>
@@ -34,9 +28,9 @@ const ManageSpots = () => {
           <Link to='/spots/new'>Create a New Spot</Link>
         </div>
       )}
-      <div>
+      <div className='each-spot'>
         {spots.map((spot) => (
-          <div key={spot.id}>
+          <div key={spot.id} id='box'>
             <Link 
               className="link-current-spots" 
               to={`/spots/${spot.id}`}
@@ -59,9 +53,13 @@ const ManageSpots = () => {
               </div>
             </Link>
             <div className='two-button'>
-              <button onClick={() => updateSpot(spot.id)}>Update</button>
-              <button onClick={() => handleDeleteSpot(spot.id)}>Delete</button>
-        
+              <Link to={`/spots/${spot.id}/update`}>
+                <button>Update</button>
+              </Link>
+              <OpenModalButton
+                buttonText='Delete'
+                modalComponent={<DeleteSpotModal spotId={spot.id} />}
+                />
             </div>
           </div>
         ))}

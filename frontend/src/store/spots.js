@@ -40,6 +40,12 @@ export const deleteSpot = (spotId) => ({
     spotId
 })
 
+export const updateSpot = (spotId) => ({
+    type: UPDATE_SPOT,
+    spotId
+})
+
+
 //thunk creators
 export const getAllSpots = ()=> async(dispatch)=> {
     const res = await csrfFetch('/api/spots');
@@ -137,7 +143,7 @@ export default function spotReducer(state = {}, action) {
             action.spots.Spots.forEach(spot=> {
                 allSpotsState[spot.id] = spot;   
             })
-            return { ...state, ...allSpotsState };
+            return allSpotsState;
         }
         case GET_ONE_SPOT: {
             return {...state,[action.spot.id]: action.spot};
@@ -160,10 +166,12 @@ export default function spotReducer(state = {}, action) {
         }
         case CURRENT_SPOTS: {
             const currentSpotsState = {};
-            action.spots.Spots.forEach(spot => {
+            if (action.spots && action.spots.Spots) {
+                action.spots.Spots.forEach(spot => {
                 currentSpotsState[spot.id] = spot;
-            });
-            return { ...state, ...currentSpotsState };
+                });
+            }
+            return currentSpotsState;
         }
         case DELETE_SPOT: {
             const deleteSpotState = { ...state };

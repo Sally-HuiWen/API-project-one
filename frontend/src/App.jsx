@@ -51,14 +51,10 @@ const router = createBrowserRouter([
         path: "/spots/current",
         element: <ManageSpots />,
       },
-      // {
-      //   path: "/spots/:spotId/update",
-      //   element: <SpotForm />,
-      // },
-      // {
-      //   path: "/spots/:spotId/delete",
-      //   element: <DeleteSpot />,
-      // },
+      {
+        path: "/spots/:spotId/update",
+        element: <UpdateForm />,
+      },
 
       // {
       //   path: 'login',
