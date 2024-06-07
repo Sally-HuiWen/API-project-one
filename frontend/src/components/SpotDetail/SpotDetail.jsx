@@ -4,7 +4,8 @@ import { useState ,useEffect} from "react";
 import { getOneSpotDetail } from "../../store/spots";
 import "./SpotDetail.css";
 import { IoStar } from "react-icons/io5";
-
+import ReviewsForSpot from "./ReviewsForSpot";
+import { getReviewsOfOneSpot } from "../../store/reviews";
 
 export default function SpotDetail() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -14,6 +15,7 @@ export default function SpotDetail() {
  
   useEffect(() => {
     dispatch(getOneSpotDetail(spotId)).then(() => setIsLoaded(true));
+    dispatch(getReviewsOfOneSpot(spotId));
 }, [dispatch, spotId]);
 
   return (
@@ -76,9 +78,10 @@ export default function SpotDetail() {
                 <h2>{spot.price} night</h2>
                 <p className="avgRating">
                   <IoStar />
-                  {spot.avgStarRating?spot.avgStarRating: "New"}
+                  {spot.avgStarRating?spot.avgStarRating.toFixed(2): "New"}
                 </p>
-                <p>{spot.numReviews} reviews</p>
+                {spot.numReviews > 0 && <p>  . </p>}
+                 <p className='numReviews'>{spot.numReviews} {spot.numReviews > 1 ? "Reviews" : "Review"}</p>
               </div>
               
               <button
@@ -87,20 +90,11 @@ export default function SpotDetail() {
                >Reserve</button>
             </div>
           </div>
-
-          <div className='review-box'>
-            <div className="review-header">
-              <h2 className="avgRating">
-                <IoStar />
-                  {spot.avgStarRating?spot.avgStarRating: "New"}
-              </h2>
-              <h2>  . </h2>
-              <h2 className='numReviews'>{spot.numReviews} reviews</h2>
-            </div>
-
-            <div className="review-list">
-            </div>
+          
+          <div>
+            <ReviewsForSpot spot={spot}/>
           </div>
+        
 
         </>
       )}

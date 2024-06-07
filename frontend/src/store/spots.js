@@ -7,7 +7,8 @@ const CREATE_NEW_SPOT = 'spots/new';
 const ADD_IMAGE='spots/addImage';
 const CURRENT_SPOTS='spots/currentOwnerSpots'
 const UPDATE_SPOT = 'spots/updateSpot';
-const DELETE_SPOT = 'spots/deleteSpot'
+const DELETE_SPOT = 'spots/deleteSpot';
+
 //action creators
 export const getSpots = (spots) => ({
     type: GET_SPOTS,
@@ -65,9 +66,9 @@ export const getOneSpotDetail = (spotId)=> async(dispatch)=> {
         // console.log('fetching on spot res body only', spot)
         dispatch(getOneSpot(spot));
     } else {
-        const errors = await res.json()
+        const error = await res.json()
         // console.log("fetching one spot detail errors", errors)
-        return errors;
+        return error;
     }
 }
 
@@ -145,17 +146,17 @@ export const updateOneSpot = (spot) => async (dispatch) => {
     });
     if (res.ok) {
         const updatedSpot = await res.json();
-         console.log("updatedSpot res body", updatedSpot)
+        //  console.log("updatedSpot res body", updatedSpot)
         dispatch(updateSpot(updatedSpot))
         return updatedSpot 
     } else {
         const error = await res.json()
-         console.log("updatedSpot error", error)
+        //  console.log("updatedSpot error", error)
         return error
     }
 }
 
-//reducers
+//reducer
 export default function spotReducer(state = {}, action) {
     switch (action.type) {
         case GET_SPOTS: {

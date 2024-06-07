@@ -49,7 +49,6 @@ const SpotForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setHasSubmitted(true);
-    const errorArr = [];
 
     if (errors.length > 0) return; // Prevent submission if frontend errors exist
 
