@@ -22,11 +22,11 @@ export default function DeleteSpotModal({ spotId }) {
   };
 
   return (
-    <div id="delete-box">
+    <div className="delete-box">
       <h1>Confirm Delete</h1>
       <h2>Are you sure you want to remove this spot from the listing?</h2>
-      <button id='yes-button' onClick={(e) => ClickYes(e)}>Yes(Delete Spot)</button>
-      <button id='no-button' onClick={(e) => ClickNo(e)}>No(Delete Spot)</button>
+      <button className='yes-button' onClick={(e) => ClickYes(e)}>Yes(Delete Spot)</button>
+      <button className='no-button' onClick={(e) => ClickNo(e)}>No(Delete Spot)</button>
     </div>
   );
 }

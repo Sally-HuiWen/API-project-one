@@ -11,9 +11,9 @@ import './ReviewsForSpot.css';
 export default function ReviewsForSpot({ spot }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.session.user);
-  console.log('could you see user?', user)
+  // console.log('could you see user?', user)
   const reviews = useSelector((state) => state.review.reviews); // it is an array!
-  console.log('do you see reviews', reviews)
+  // console.log('do you see reviews', reviews)
   
   useEffect(() => {
     dispatch(getReviewsOfOneSpot(spot.id));
@@ -32,7 +32,7 @@ export default function ReviewsForSpot({ spot }) {
     const year = date.getFullYear();
     return `${month} ${year}`;
   };
-  console.log('Reviews is loaded or not', reviews);
+  // console.log('Reviews is loaded or not', reviews);
 
   const totalRatingForReviews = reviews.map(review => review.stars).reduce((acc,curr)=> acc + curr, 0);
   const reviewNum = reviews.length;

@@ -12,6 +12,12 @@ export default function SpotDetail() {
   const {spotId} = useParams();
   const dispatch = useDispatch();
   const spot = useSelector((state) => state.spot[spotId]);
+  
+  const reviews = useSelector((state) => state.review.reviews); // it is an array!
+  const totalRatingForReviews = reviews.map(review => review.stars).reduce((acc,curr)=> acc + curr, 0);
+  const reviewNum = reviews.length;
+  const avgRating = reviewNum > 0 ? totalRatingForReviews / reviewNum : 0;
+
  
   useEffect(() => {
     dispatch(getOneSpotDetail(spotId)).then(() => setIsLoaded(true));
@@ -78,10 +84,10 @@ export default function SpotDetail() {
                 <h2>{spot.price} night</h2>
                 <p className="avgRating">
                   <IoStar />
-                  {spot.avgStarRating?spot.avgStarRating.toFixed(2): "New"}
+                  {reviewNum > 0 ? avgRating.toFixed(2) : "New"}
                 </p>
-                {spot.numReviews > 0 && <p>  . </p>}
-                 <p className='numReviews'>{spot.numReviews} {spot.numReviews > 1 ? "Reviews" : "Review"}</p>
+                {reviews.length > 0 && <p>  . </p>}
+                 <p className='numReviews'>{reviews.length} {reviews.length > 1 ? "Reviews" : "Review"}</p>
               </div>
               
               <button

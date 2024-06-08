@@ -33,7 +33,7 @@ const SpotsList = () => {
                     <p className="spot-city-state">{spot.city}, {spot.state}</p>
                     <p className="spot-avgRating">
                       <IoStar />
-                    {spot.avgRating?spot.avgRating: "New"}
+                    {spot.avgRating?spot.avgRating.toFixed(2): "New"}
                     </p> 
                 </div>
                 <div className="spot-price">{spot.price}night</div>

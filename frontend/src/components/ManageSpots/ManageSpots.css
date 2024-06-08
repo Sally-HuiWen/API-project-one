@@ -25,3 +25,11 @@
     width:100%;
     height: 350px;
 }
+
+#link {
+    border: 2px solid darkorchid;
+    border-radius: 5px;
+    color: white;
+    background-color: darkorchid;
+    text-decoration: none;
+}

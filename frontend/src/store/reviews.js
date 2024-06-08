@@ -83,12 +83,10 @@ export default function reviewReducer(state = initialState, action) {
               };
         }
         case CREATE_REVIEW: {
-            action.review.User = action.user
-            let updatedReviews = [...state.reviews, action.review]
+            const newReview = { ...action.review, User: action.user };
             return {
                 ...state,
-                 [action.review.id]: action.review,
-                  reviews: updatedReviews
+                reviews: [...state.reviews, newReview]
             };
         }
         default: 

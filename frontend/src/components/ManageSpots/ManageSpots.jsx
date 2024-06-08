@@ -16,16 +16,13 @@ const ManageSpots = () => {
     dispatch(currentUserOwnedSpots());
   }, [dispatch, userId]);
 
-  if (!spots.length) {
-    return <div>Loading...</div>; 
-  }
 
   return (
     <div id='current-owner-spots-container'>
-      <h1>Manage Spots</h1>
+      <h1>Manage Your Spots</h1>
       {spots.length === 0 && (
         <div>
-          <Link to='/spots/new'>Create a New Spot</Link>
+          <Link id='link' to='/spots/new'>Create a New Spot</Link>
         </div>
       )}
       <div className='each-spot'>

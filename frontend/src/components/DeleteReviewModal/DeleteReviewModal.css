@@ -1,8 +1,6 @@
-#delete-box {
+.delete-box {
     width: 450px;
     height: 300px;
-    border: 4px solid black;
-    border-radius: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -11,7 +9,7 @@
     padding-bottom:20px;
 }
 
-#yes-button {
+.yes-button {
     background-color: red;
     color: white;
     height:50px;
@@ -19,7 +17,7 @@
     box-shadow: 3px 3px 2px black
 }
 
-#no-button {
+.no-button {
     background-color: darkgray;
     color: white;
     height:50px;
