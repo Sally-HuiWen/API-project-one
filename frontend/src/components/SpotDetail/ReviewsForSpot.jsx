@@ -34,17 +34,20 @@ export default function ReviewsForSpot({ spot }) {
   };
   console.log('Reviews is loaded or not', reviews);
 
+  const totalRatingForReviews = reviews.map(review => review.stars).reduce((acc,curr)=> acc + curr, 0);
+  const reviewNum = reviews.length;
+  const avgRating = reviewNum > 0 ? totalRatingForReviews / reviewNum : 0;
 
   return (
     <div className="reviews-box">
       <div id="reviews-header">
         <h2 className="avgRating">
           <IoStar />
-          {spot.avgStarRating ? spot.avgStarRating.toFixed(2) : "New"}
+          {reviewNum > 0 ? avgRating.toFixed(2) : "New"}
         </h2>
-        {spot.numReviews > 0 && <h2>.</h2>}
+        {reviews.length > 0 && <h2>.</h2>}
         <h2 className="numReviews">
-          {spot.numReviews} {spot.numReviews > 1 ? "Reviews" : "Review"}
+          {reviews.length} {reviews.length > 1 ? "Reviews" : "Review"}
         </h2>
       </div>
 
@@ -52,7 +55,7 @@ export default function ReviewsForSpot({ spot }) {
         <div>
           <OpenModalButton
             buttonText="Post Your Review"
-            modalComponent={<ReviewFormModal spot={spot}/>}
+            modalComponent={<ReviewFormModal spot={spot} user={user}/>}
           />
         </div>
       )}

@@ -16,10 +16,11 @@ export const deleteReview = (reviewId) => ({
     reviewId
 })
 
-export const createReview = (spotId, review) => ({
+export const createReview = (spotId, review, user) => ({
     type: CREATE_REVIEW,
     spotId,
-    review
+    review,
+    user
 })
 
 //thunk creators
@@ -48,7 +49,7 @@ export const deleteMyOwnReview = (reviewId) => async (dispatch) => {
     }
   };
 
-export const createNewReview = (spotId, reviewObj) => async (dispatch) => {
+export const createNewReview = (spotId, reviewObj, user) => async (dispatch) => {
     const res = await csrfFetch(`/api/spots/${spotId}/reviews`, {
         method: 'POST',
         headers: { 
@@ -58,7 +59,7 @@ export const createNewReview = (spotId, reviewObj) => async (dispatch) => {
     })
     if (res.ok) {
         const newReviewObj= await res.json();
-        dispatch(createReview(spotId, newReviewObj))
+        dispatch(createReview(spotId, newReviewObj, user))
         return newReviewObj
     } else {
         const error = await res.json()
@@ -82,9 +83,12 @@ export default function reviewReducer(state = initialState, action) {
               };
         }
         case CREATE_REVIEW: {
+            action.review.User = action.user
+            let updatedReviews = [...state.reviews, action.review]
             return {
                 ...state,
-                reviews: [...state.reviews, action.review]
+                 [action.review.id]: action.review,
+                  reviews: updatedReviews
             };
         }
         default: 

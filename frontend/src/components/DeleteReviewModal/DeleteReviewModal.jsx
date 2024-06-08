@@ -1,7 +1,8 @@
+//scr/components/DeleteReviewModal/DeleteReviewModal.jsx
 import { useDispatch} from "react-redux";
 import { useModal } from "../../context/Modal";
-import {deleteMyOwnReview, getReviewsOfOneSpot} from "../../store/reviews";
-import { getAllSpots } from "../../store/spots";
+import {deleteMyOwnReview } from "../../store/reviews";
+
 
 export default function DeleteReviewModal({ reviewId, spot }) {
   const { closeModal } = useModal();
@@ -11,7 +12,6 @@ export default function DeleteReviewModal({ reviewId, spot }) {
     e.preventDefault();
     try {
       await dispatch(deleteMyOwnReview(reviewId));
-      await dispatch(getReviewsOfOneSpot(spot.id));
       closeModal();
     } catch (error) {
       console.error('can not delete review:', error);

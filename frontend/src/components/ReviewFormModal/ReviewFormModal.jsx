@@ -1,11 +1,12 @@
+//src/components/Review
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { useState, useEffect } from "react";
 import StarRatingInput from "./StarRatingInput";
-import {createNewReview, getReviewsOfOneSpot} from "../../store/reviews";
+import {createNewReview} from "../../store/reviews";
 import './ReviewFormModal.css'
 
-export default function ReviewFormModal({spot}) {
+export default function ReviewFormModal({spot, user}) {
   const { closeModal } = useModal();
   const dispatch = useDispatch();
   const [review, setReview] = useState('');
@@ -26,8 +27,7 @@ export default function ReviewFormModal({spot}) {
     e.preventDefault();
     setHasSubmitted(true);
     const rawReview = {review, stars};
-    const newReview = await dispatch(createNewReview(spot.id, rawReview))
-    await dispatch(getReviewsOfOneSpot(spot.id))
+    const newReview = await dispatch(createNewReview(spot.id, rawReview, user))
    
     if (newReview.errors) {
         setBackendErrors(newReview.errors)
@@ -60,7 +60,7 @@ export default function ReviewFormModal({spot}) {
          <p>stars</p>
       </div>
      
-      <button id='review-submit' type='submit' disabled={frontendErrors.length > 0}>Submit Your Review</button>
+      <button id='review-submit' type='submit'>Submit Your Review</button>
     </form>
   );
 
