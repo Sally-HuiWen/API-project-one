@@ -27,8 +27,8 @@
     height: 50px;
     border: 3px solid black;
     background-color: red;
+    color: white;
     box-shadow: 5px 5px 5px black; 
-    color:black;
     cursor: pointer; 
   }
   
@@ -46,4 +46,9 @@
     margin-top: 30px;
     color:blue;
     font-size: larger;
+}
+
+#error-message {
+    color:red;
+    text-align: center;
 }

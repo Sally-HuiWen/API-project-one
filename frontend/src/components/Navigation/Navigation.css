@@ -28,13 +28,23 @@
 }
 
 .home-and-login{
-  border-radius: 10px;
-  padding-right:50px;
-  font-size: large;
+  padding-right:100px;
+  font-size: large; 
+}
+
+#ul-box {
+  list-style: none;
+  width: 50px;
+  
 }
 
 .create-new-spot-link {
   border:none;
   background-color: white;
   font-size: large;
+  color: blueviolet
+}
+
+#home-link {
+  color: blueviolet
 }

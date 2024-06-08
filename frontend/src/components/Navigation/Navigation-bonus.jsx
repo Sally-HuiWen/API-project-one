@@ -27,9 +27,9 @@ function Navigation({ isLoaded }) {
         </div>
 
         <div className='home-and-login' >
-        <ul>
+        <ul id='ul-box'>
           <li>
-            <NavLink to="/">Home</NavLink>
+            <NavLink to="/" id='home-link'>Home</NavLink>
           </li>
           {isLoaded && (
           <li>
