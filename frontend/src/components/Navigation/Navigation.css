@@ -5,3 +5,46 @@
 .hidden {
   display: none;
 }
+
+#airbnb-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left-header {
+  font-size: 50px;
+}
+
+.logo-and-name {
+  color: red;
+  text-decoration: none;
+}
+
+.right-header {
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
+}
+
+.home-and-login{
+  padding-right:100px;
+  font-size: large; 
+}
+
+#ul-box {
+  list-style: none;
+  width: 50px;
+  
+}
+
+.create-new-spot-link {
+  border:none;
+  background-color: white;
+  font-size: large;
+  color: blueviolet
+}
+
+#home-link {
+  color: blueviolet
+}

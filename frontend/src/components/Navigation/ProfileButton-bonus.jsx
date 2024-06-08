@@ -4,9 +4,12 @@ import * as sessionActions from '../../store/session';
 import OpenModalMenuItem from './OpenModalMenuItem';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
+import './ProfileButton.css'
+import { Link, useNavigate } from 'react-router-dom';
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
 
@@ -34,6 +37,7 @@ function ProfileButton({ user }) {
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
+    navigate('/')
     closeMenu();
   };
 
@@ -44,14 +48,15 @@ function ProfileButton({ user }) {
       <button onClick={toggleMenu}>
         <i className="fas fa-user-circle" />
       </button>
-      <ul className={ulClassName} ref={ulRef}>
+      <div id='list-format'>
+      <ul className={ulClassName} id='ul' ref={ulRef}>
         {user ? (
           <>
-            <li>{user.username}</li>
-            <li>{user.firstName} {user.lastName}</li>
+            <li>Hello, {user.firstName}</li>
             <li>{user.email}</li>
+            <li><Link id='manage-spot' to='/spots/current'>Manage Spots</Link></li>
             <li>
-              <button onClick={logout}>Log Out</button>
+              <button id='logout-button' onClick={logout}>Log Out</button>
             </li>
           </>
         ) : (
@@ -69,6 +74,7 @@ function ProfileButton({ user }) {
           </>
         )}
       </ul>
+      </div>
     </>
   );
 }

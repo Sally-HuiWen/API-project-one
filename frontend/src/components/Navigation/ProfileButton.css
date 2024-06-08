@@ -1,0 +1,26 @@
+#list-format {
+    width:100px; 
+}
+
+#ul { 
+    list-style-type: none;
+    font-weight: 200;
+    border:1px solid black;
+    border-radius: 5px;
+    background-color: white;
+}
+
+#logout-button {
+    border-radius: 20px;
+    background-color:lightcoral;
+}
+
+i {
+    font-size: large;
+
+}
+
+#manage-spot {
+    text-decoration: none;
+    color: black;
+}

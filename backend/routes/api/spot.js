@@ -166,7 +166,7 @@ router.get('/current', requireAuth, async(req,res)=> {
         delete spot.dataValues.SpotImages; 
         
     }
-    res.status(200).json({spots: currentUserSpots});
+    res.status(200).json({Spots: currentUserSpots});
    
 
 
@@ -188,7 +188,7 @@ router.get('/:spotId', async(req,res)=> {
           });
     }
 
-    const {id, ownerId, address, city, state, lat, lng, name, description, price, createdAt, updatedAt, SpotImages } = spot;
+    const {id, ownerId, address, city, state, country, lat, lng, name, description, price, createdAt, updatedAt, SpotImages } = spot;
     const spotRatingArr = spot.Reviews.map(review => review.stars)
     const num = spot.Reviews.length
     const spotAvgRating = (spotRatingArr.reduce((acc,curr) => acc + curr, 0))/num
@@ -205,6 +205,7 @@ router.get('/:spotId', async(req,res)=> {
         address,
         city,
         state,
+        country,
         lat,
         lng,
         name,
@@ -327,6 +328,7 @@ router.put('/:spotId', requireAuth, validateSpot, async(req, res, next)=> {
 
     const {address, city, state, country, lat, lng, name, description, price} = req.body;
     spot.address = address;
+    spot.state = state;
     spot.city = city;
     spot.country = country;
     spot.lat = lat;

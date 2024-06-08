@@ -1,0 +1,16 @@
+.stars-input {
+    display: flex;
+  }
+  
+  .stars-input div {
+    cursor: pointer;
+    font-size: 2rem; 
+  }
+  
+  .filled {
+    color: gold; 
+  }
+  
+  .empty {
+    color: lightgray; 
+  }
