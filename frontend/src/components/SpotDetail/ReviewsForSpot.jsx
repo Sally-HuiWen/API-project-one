@@ -75,7 +75,7 @@ export default function ReviewsForSpot({ spot }) {
                   <OpenModalButton
                     buttonText="Delete"
                     modalComponent={
-                      <DeleteReviewModal reviewId={review.id} spot={spot}/>
+                      <DeleteReviewModal reviewId={review.id}/>
                     }
                   />
                 )}

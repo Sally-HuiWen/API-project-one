@@ -41,15 +41,15 @@ const UpdateForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setHasSubmitted(true);
-    console.log('Form submitted');
+    // console.log('Form submitted');
 
     const updatedSpot = { ...spot, address, city, state, country, lat, lng, name, description, price}
     const updated = await dispatch(updateOneSpot(updatedSpot));
     if (updated.errors) {
-        console.log('Errors:', updated.errors);
+        // console.log('Errors:', updated.errors);
         setErrors(updated.errors);
     } else {
-        console.log('Navigation to', `/spots/${spotId}`);
+        // console.log('Navigation to', `/spots/${spotId}`);
         navigate(`/spots/${spotId}`);
     }
   };

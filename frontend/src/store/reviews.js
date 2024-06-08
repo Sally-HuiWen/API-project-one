@@ -28,11 +28,11 @@ export const getReviewsOfOneSpot = (spotId) => async (dispatch) => {
     const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
     if (res.ok) {
         const resBody = await res.json();
-        console.log('fetching reviews of one spot res body only', resBody)
+        // console.log('fetching reviews of one spot res body only', resBody)
         dispatch(getReviews(resBody.Reviews));//resBody.Reviews is an array
     } else {
         const error = await res.json()
-        console.log("fetching review of one spot errors", error)
+        // console.log("fetching review of one spot errors", error)
         return error;
     }
 }

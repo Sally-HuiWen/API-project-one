@@ -4,7 +4,7 @@ import { useModal } from "../../context/Modal";
 import {deleteMyOwnReview } from "../../store/reviews";
 import './DeleteReviewModal.css'
 
-export default function DeleteReviewModal({ reviewId, spot }) {
+export default function DeleteReviewModal({ reviewId }) {
   const { closeModal } = useModal();
   const dispatch = useDispatch();
 

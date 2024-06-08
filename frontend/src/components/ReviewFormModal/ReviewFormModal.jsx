@@ -60,7 +60,7 @@ export default function ReviewFormModal({spot, user}) {
          <p>stars</p>
       </div>
      
-      <button id='review-submit' type='submit'>Submit Your Review</button>
+      <button id='review-submit' type='submit' disabled={frontendErrors.length > 0}>Submit Your Review</button>
     </form>
   );
 
