@@ -49,6 +49,6 @@ module.exports = {
      */
     options.tableName = 'ReviewImages';
     return queryInterface.bulkDelete(options, 'ReviewImages')
-      // {id: {[Op.in]: [1, 2, 3]}});
+      //  {id: {[Op.in]: [1, 2, 3]}});
   }
 };
