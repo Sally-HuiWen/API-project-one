@@ -45,10 +45,11 @@ export default function ReviewsForSpot({ spot }) {
           <IoStar />
           {reviewNum > 0 ? avgRating.toFixed(2) : "New"}
         </h2>
-        {reviews.length > 0 && <h2>.</h2>}
-        <h2 className="numReviews">
+        {reviews.length > 0 && <h2 className='dot'>.</h2>}
+
+        {reviews.length > 0 && <h2 className="numReviews">
           {reviews.length} {reviews.length > 1 ? "Reviews" : "Review"}
-        </h2>
+        </h2>}
       </div>
 
       {user && user.id !== spot.Owner.id && !userReview && (

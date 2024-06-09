@@ -26,18 +26,12 @@ function Navigation({ isLoaded }) {
           )}
         </div>
 
-        <div className='home-and-login' >
-        <ul id='ul-box'>
-          <li>
-            <NavLink to="/" id='home-link'>Home</NavLink>
-          </li>
-          {isLoaded && (
-          <li>
-            <ProfileButton user={sessionUser} />
-          </li>
-          )}
-        </ul>
-      </div>
+        {isLoaded && (
+        <div id='profile-button-div'>
+          <ProfileButton user={sessionUser} />
+        </div>
+        )}
+    
       </div>   
   </div>
   );
