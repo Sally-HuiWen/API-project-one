@@ -18,10 +18,10 @@ const SpotsList = () => {
   return (
     <div className="get-all-spots">
         {isLoaded && spots && spots.map((spot) => (
+          <div className="spot-tile-container" key={spot.id}>
             <Link 
               className="link-all-spots" 
-              key={spot.id} to={`/spots/${spot.id}`}
-              title={spot.name}//using the title attribute in the <Link> element will create a simple tooltip that displays the value of spot.name when you hover
+              to={`/spots/${spot.id}`}
             > 
              <div className='container'>
                 <img
@@ -36,9 +36,12 @@ const SpotsList = () => {
                     {spot.avgRating?spot.avgRating.toFixed(2): "New"}
                     </p> 
                 </div>
-                <div className="spot-price">{spot.price}night</div>
-             </div>        
-            </Link>   
+                <div className="spot-price">${spot.price} / night</div>
+             </div> 
+            <div className="tooltip">{spot.name}</div>     
+            </Link>  
+             
+        </div> 
 
         ))}
     </div>

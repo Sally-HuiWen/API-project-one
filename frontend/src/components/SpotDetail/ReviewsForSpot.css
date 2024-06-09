@@ -2,5 +2,9 @@
     display: flex;
     justify-content:left;
     align-items: center;
-    gap: 5px;
+    column-gap: 5px;
+}
+
+.dot {
+    padding-bottom: 8px;
 }

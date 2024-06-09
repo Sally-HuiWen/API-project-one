@@ -86,8 +86,8 @@ export default function SpotDetail() {
                   <IoStar />
                   {reviewNum > 0 ? avgRating.toFixed(2) : "New"}
                 </p>
-                {reviews.length > 0 && <p>  . </p>}
-                 <p className='numReviews'>{reviews.length} {reviews.length > 1 ? "Reviews" : "Review"}</p>
+                {reviews.length > 0 && <p className='dot'>  . </p>}
+                {reviews.length > 0 && <p className='numReviews'>{reviews.length} {reviews.length > 1 ? "Reviews" : "Review"}</p>}
               </div>
               
               <button

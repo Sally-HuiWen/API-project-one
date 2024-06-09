@@ -194,7 +194,7 @@ const UpdateForm = () => {
         </div> 
       </div>
 
-      <button id='submit-button' type="submit">Create Spot</button>
+      <button id='submit-button' type="submit">Update Your Spot</button>
     </form>
   );
 };
