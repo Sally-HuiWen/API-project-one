@@ -38,12 +38,14 @@
 
 .spot-price {
     margin: 0;
+    color: blue;
     
 }
 
 .spot-city-state,
 .spot-avgRating {
   margin: 0;
+  color: blue;
 }
 
 .tooltip {
