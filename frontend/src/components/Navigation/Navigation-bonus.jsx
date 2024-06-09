@@ -11,8 +11,8 @@ function Navigation({ isLoaded }) {
     <div id="airbnb-header">
       <div className='left-header'>
         <NavLink className='logo-and-name' to='/'>
-          <TbBrandAirbnb/>
-          airbnb</NavLink>
+        <img src='/Wen.ico' alt='BestBnb-logo' className='my-logo' />
+          BestBnb</NavLink>
       </div>
 
       <div className='right-header'>
