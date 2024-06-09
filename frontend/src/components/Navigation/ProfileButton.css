@@ -3,11 +3,20 @@
 }
 
 #ul { 
-    list-style-type: none;
-    font-weight: 200;
-    border:1px solid black;
-    border-radius: 5px;
+    right: 0; 
     background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    z-index: 1000; 
+    text-align: center;
+    list-style: none;
+    padding-right: 20px;
+    
+}
+
+.hidden {
+    display: none;
+
 }
 
 #logout-button {
