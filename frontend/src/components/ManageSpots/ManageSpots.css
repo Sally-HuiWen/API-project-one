@@ -8,6 +8,8 @@
 
 .each-spot > div {
     flex-basis: 23%; 
+    border-radius: 10px;
+    overflow: hidden;
     
 }
 
