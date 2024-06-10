@@ -518,32 +518,6 @@ module.exports = {
         url: 'https://a0.muscache.com/im/pictures/9cd83f9b-e42e-44b0-8307-b53869bf6bb2.jpg?im_w=1200',
         preview: true,
       },
-      {
-        spotId: 21,
-        url: 'https://a0.muscache.com/im/pictures/airflow/Hosting-831785990822685820/original/65185ff5-75e5-4d94-ba74-08970ac75a19.jpg?im_w=720',
-        preview: true,
-      },
-      {
-        spotId: 21,
-        url: 'https://a0.muscache.com/im/pictures/airflow/Hosting-831785990822685820/original/0e5a0d63-d1ed-43f6-857e-9419bad9733b.jpg?im_w=720',
-        preview: true,
-      },
-      {
-        spotId: 21,
-        url: 'https://a0.muscache.com/im/pictures/airflow/Hosting-831785990822685820/original/e6b75a55-2c28-407d-a5c3-6f38e0013774.jpg?im_w=1200',
-        preview: true,
-      },
-      {
-        spotId: 21,
-        url: 'https://a0.muscache.com/im/pictures/airflow/Hosting-831785990822685820/original/0732f97b-f8af-47de-90bf-f3b10202f9ed.jpg?im_w=1200',
-        preview: true,
-      },
-      {
-        spotId: 21,
-        url: 'https://a0.muscache.com/im/pictures/airflow/Hosting-831785990822685820/original/5f84099b-5a1e-4de9-a0b2-ff3f46044d9d.jpg?im_w=1200',
-        preview: true,
-      },
-
     ])
   },
 
@@ -555,7 +529,7 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
     options.tableName = 'SpotImages';
-    return queryInterface.bulkDelete(options, 'SpotImages')
-      // {id: { [Op.in]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42]}});
+    return queryInterface.bulkDelete(options, //'SpotImages')
+      {id: { [Op.in]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42]}});
     }
 }

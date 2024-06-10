@@ -1,3 +1,4 @@
+
 .country-div,
 .address-div,
 .city-div,
@@ -27,4 +28,11 @@
 
 .errors {
     color: red;
+}
+
+#country,
+#address,
+#description,
+#name {
+    width: 290px;
 }

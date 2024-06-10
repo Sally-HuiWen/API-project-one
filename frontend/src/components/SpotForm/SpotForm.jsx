@@ -85,7 +85,7 @@ const SpotForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} id='create-spot-form'>
       <div className='form-header'>
         <h1>Create a new Spot</h1>
         <h2>Where is your place located?</h2>
@@ -179,6 +179,7 @@ const SpotForm = () => {
         <p>Mention the best features of your space, any special amenities like fast wifi or parking, and what you love about the neighborhood</p>
         <label>
             <textarea
+            id='description'
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder='Description'
@@ -194,6 +195,7 @@ const SpotForm = () => {
         <p> Catch guests attention with a spot title that highlights what makes your place special.</p>
         <label>
             <input 
+            id='name'
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
