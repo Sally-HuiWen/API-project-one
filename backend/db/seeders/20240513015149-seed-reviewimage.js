@@ -48,7 +48,7 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
     options.tableName = 'ReviewImages';
-    return queryInterface.bulkDelete(options, 'ReviewImages')
-      // {id: {[Op.in]: [1, 2, 3]}});
+    return queryInterface.bulkDelete(options, //'ReviewImages')
+       {id: {[Op.in]: [1, 2, 3]}});
   }
 };

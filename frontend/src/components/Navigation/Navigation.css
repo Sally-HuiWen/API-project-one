@@ -1,0 +1,60 @@
+.profile-dropdown {
+  position: absolute;
+}
+
+.hidden {
+  display: none;
+}
+
+#airbnb-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left-header {
+  font-size: 50px;
+}
+
+.logo-and-name {
+  color: #FF66CC;
+  text-decoration: none;
+}
+
+.right-header {
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
+}
+
+.home-and-login{
+  padding-right:100px;
+  font-size: large; 
+}
+
+#ul-box {
+  list-style: none;
+  width: 50px;
+  
+}
+
+.create-new-spot-link {
+  border:none;
+  background-color: white;
+  font-size: large;
+  color: blue;
+}
+
+#home-link {
+  color: blueviolet
+}
+
+#profile-button-div {
+  border: 1px solid black;
+  border-radius: 30px;
+  box-shadow: 2px 2px 2px black;
+  text-align: center;
+  width:70px;
+  height:30px;
+  padding-top:4px;
+}

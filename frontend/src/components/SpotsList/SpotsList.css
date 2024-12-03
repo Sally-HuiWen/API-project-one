@@ -1,0 +1,69 @@
+.get-all-spots {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 10px;;
+
+}
+
+.spot-tile-container {
+    position: relative;
+    color:blueviolet;
+    flex-basis: 24%;
+    border: 2px solid blue; 
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 30px;   
+}
+
+.link-all-spots {
+    text-decoration: none;
+}
+
+.box {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1px;
+}
+
+#spot-image {
+    width: 100%;
+    height: 350px;
+}
+
+
+#city-state-rating {
+    display: flex;
+    justify-content:space-between;
+  }
+
+.spot-price {
+    margin: 0;
+    color: blue;
+    
+}
+
+.spot-city-state,
+.spot-avgRating {
+  margin: 0;
+  color: blue;
+}
+
+.tooltip {
+    visibility: hidden;
+    opacity: 0;
+    background-color: darkblue;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 10;
+    bottom: 80px; /* It is important to adjust this value to position the tooltip above the image */
+    left: 50%;
+    transform: translateX(-50%);
+}
+  
+.spot-tile-container:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}

@@ -1,0 +1,10 @@
+#reviews-header {
+    display: flex;
+    justify-content:left;
+    align-items: center;
+    column-gap: 5px;
+}
+
+.dot {
+    padding-bottom: 8px;
+}
