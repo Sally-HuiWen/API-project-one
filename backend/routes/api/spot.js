@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
 const { Spot, SpotImage, Review, User, ReviewImage, Booking } = require('../../db/models')
 const { requireAuth } = require ('../../utils/auth');
 const {check} = require('express-validator');
 const {handleValidationErrors} = require('../../utils/validation');
 const { ValidationError } = require('sequelize');
 const { Op } = require('sequelize');
-
+const {uploadFileToS3} = require('../../utils/AWS_helper')
 
 //Get all Spots
 const validateQueryParameters = [
@@ -275,7 +276,10 @@ router.post('/', requireAuth, validateSpot, async(req,res)=> {
 });
 
 //Add an Image to a Spot based on the Spot's id
-router.post('/:spotId/images', requireAuth, async(req,res,next)=> {
+//configure multer for file uploads
+const upload = multer();
+
+router.post('/:spotId/images', requireAuth, upload.single('image'), async(req,res,next)=> {
     const spot = await Spot.findByPk(req.params.spotId);
     //if this spot does not exist, create error, statusCode 404
     if (!spot) {
@@ -292,19 +296,43 @@ router.post('/:spotId/images', requireAuth, async(req,res,next)=> {
         err.status = 403;
         return next(err);
     }
-    
-    const {url, preview} = req.body;
-    const newImageForSpot = await spot.createSpotImage({
-        url,
-        preview
-    });
-    const payload = {
-        id: newImageForSpot.id,
-        url,
-        preview
+
+    const file = req.file;
+
+    // If no file is uploaded, return a 400 error
+    if (!file) {
+        const err = new Error("No file uploaded");
+        err.status = 400;
+        return next(err);
     }
 
+    try {
+        // Upload the file to AWS S3
+        const result = await uploadFileToS3(file.buffer, file.originalname, file.mimetype);
+
+        // Save the image URL and preview status in the database
+        const newImageForSpot = await SpotImage.create({
+            spotId: spot.id,
+            url: result.url, // The S3 URL of the uploaded image
+            preview: req.body.preview || false, // Default to false if not provided
+        });
+
+    //prepare the payload
+    const payload = {
+        id: newImageForSpot.id,
+        url: newImageForSpot.url,
+        preview: newImageForSpot.preview,
+
+    }
+
+    // Send a 200 response with the image details
     res.status(200).json(payload);
+} catch (error) {
+    console.error("Error uploading file to S3:", error);
+    const err = new Error("Failed to upload file");
+    err.status = 500;
+    return next(err);
+}
 });
 
 //Edit a Spot
