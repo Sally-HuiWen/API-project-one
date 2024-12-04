@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       SpotImage.belongsTo(models.Spot, {
-        foreignKey: 'spotId'
+        foreignKey: 'spotId',
+        onDelete:'Cascade'
       })
     }
   }
@@ -21,6 +22,18 @@ module.exports = (sequelize, DataTypes) => {
     },
     url: {
       type: DataTypes.STRING,
+      url: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          isUrl: true, // Ensure the URL format is valid
+          isS3Url(value) {
+            if (!value.startsWith('https://') || !value.includes('s3')) {
+              throw new Error('URL must point to an S3 resource');
+            }
+          },
+        },
+      },
     },
     preview: {
       type: DataTypes.BOOLEAN,

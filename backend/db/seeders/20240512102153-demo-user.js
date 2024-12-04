@@ -10,7 +10,8 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await User.bulkCreate([
+    try {
+      await User.bulkCreate([
       {
         firstName: 'Sally',
         lastName: 'Wen',
@@ -29,10 +30,13 @@ module.exports = {
         firstName: 'Stella',
         lastName: 'Bogon',
         email: 'user2@user.io',
-        username: '.,dsaTYUIOP[',
+        username: 'FakeUser2',
         hashedPassword: bcrypt.hashSync('password3')
       }
     ], { validate: true });
+   } catch (error) {
+     console.error('Validation error:', error);
+   }
   },
 
   async down (queryInterface, Sequelize) {
